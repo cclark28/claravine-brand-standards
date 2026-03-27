@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 44" role="img" aria-label="Claravine logo">
+  <title>Claravine</title>
+  <defs>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&amp;display=swap');</style>
+  </defs>
+  <!-- Step mark: two rectangles forming brand icon -->
+  <rect x="0" y="4" width="11" height="26" rx="2.5" fill="#5DD39E"/>
+  <rect x="11" y="17" width="8" height="13" rx="2" fill="#5DD39E"/>
+  <!-- Wordmark: dark navy on transparent -->
+  <text x="28" y="33" font-family="'Poppins', system-ui, sans-serif" font-weight="600" font-size="24" fill="#263F48" letter-spacing="-0.3">claravine</text>
+</svg>
