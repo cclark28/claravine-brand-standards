@@ -980,6 +980,159 @@
     /* ====================================================
        FOOTER
     ==================================================== */
+    /* ====================================================
+       LIVING SYSTEM
+    ==================================================== */
+    .ls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-5);
+      margin-top: var(--sp-6);
+    }
+    .ls-pillar {
+      background: var(--cv-white);
+      border: 1px solid #DDE5E8;
+      border-radius: var(--radius-lg);
+      padding: var(--sp-5);
+    }
+    .ls-pillar__icon {
+      font-size: 28px;
+      color: var(--cv-green);
+      margin-bottom: var(--sp-3);
+    }
+    .ls-pillar__title {
+      font-family: var(--font-primary);
+      font-size: var(--text-base);
+      font-weight: 700;
+      color: var(--cv-dark);
+      margin-bottom: var(--sp-2);
+    }
+    .ls-pillar__body {
+      font-size: var(--text-sm);
+      color: var(--cv-body-text);
+      line-height: 1.65;
+    }
+    .ls-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: var(--sp-6);
+      margin-top: var(--sp-7);
+      align-items: start;
+    }
+    .ls-timeline__title,
+    .ls-migration__title {
+      font-family: var(--font-primary);
+      font-size: var(--text-base);
+      font-weight: 700;
+      margin-bottom: var(--sp-4);
+    }
+    .ls-timeline__title { color: var(--cv-dark); }
+    .ls-versions {
+      display: flex;
+      flex-direction: column;
+      border-left: 2px solid #DDE5E8;
+      padding-left: var(--sp-5);
+      margin-left: var(--sp-1);
+    }
+    .ls-version {
+      position: relative;
+      padding-bottom: var(--sp-4);
+    }
+    .ls-version:last-child { padding-bottom: 0; }
+    .ls-version::before {
+      content: '';
+      position: absolute;
+      left: calc(-1 * var(--sp-5) - 5px);
+      top: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #DDE5E8;
+      border: 2px solid var(--cv-white);
+    }
+    .ls-version--current::before {
+      background: var(--cv-green);
+      box-shadow: 0 0 0 3px rgba(93,211,158,0.25);
+    }
+    .ls-version__tag {
+      font-family: var(--font-primary);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--cv-green);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+    .ls-version__label {
+      font-family: var(--font-primary);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--cv-dark);
+    }
+    .ls-version__notes {
+      font-size: 12px;
+      color: var(--cv-body-text);
+      margin-top: 3px;
+      line-height: 1.5;
+    }
+    .ls-migration {
+      background: var(--cv-dark);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-6);
+    }
+    .ls-migration__title { color: var(--cv-green); }
+    .ls-migration__body {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.7);
+      line-height: 1.65;
+      margin-bottom: var(--sp-5);
+    }
+    .ls-steps {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--sp-3);
+    }
+    .ls-step {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-md);
+      padding: var(--sp-4);
+    }
+    .ls-step__num {
+      font-family: var(--font-primary);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--cv-green);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: var(--sp-1);
+    }
+    .ls-step__label {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--cv-white);
+      margin-bottom: 4px;
+    }
+    .ls-step__body {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+    .ls-hosted-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      background: rgba(93,211,158,0.12);
+      border: 1px solid rgba(93,211,158,0.3);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-family: var(--font-primary);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--cv-green);
+      margin-bottom: var(--sp-4);
+    }
+
     .footer {
       background: #1C3039;
       padding: var(--sp-7) var(--sp-6);
@@ -1404,6 +1557,9 @@
 
     /* 768px — tablet */
     @media (max-width: 768px) {
+      .ls-grid { grid-template-columns: 1fr; }
+      .ls-bottom { grid-template-columns: 1fr; }
+      .ls-steps { grid-template-columns: repeat(2, 1fr); }
       .comp-grid { grid-template-columns: 1fr; }
       :root { --sec-pad: 64px; --nav-h: 56px; }
       .nav__links { display: none; }
@@ -1424,6 +1580,7 @@
 
     /* 480px — large mobile */
     @media (max-width: 480px) {
+      .ls-steps { grid-template-columns: 1fr; }
       :root { --sec-pad: 48px; }
       .section { padding: var(--sec-pad) var(--sp-3); }
       .hero { padding: 72px var(--sp-3) 56px; }
@@ -1480,8 +1637,9 @@
         <li><a href="#voice">Voice &amp; Tone</a></li>
         <li><a href="#motion">Motion</a></li>
         <li><a href="#downloads">Downloads</a></li>
+        <li><a href="#living-system">Living System</a></li>
       </ul>
-      <span class="nav__version">v1.0 · Mar 2026</span>
+      <span class="nav__version">v1.3 · Mar 2026</span>
     </div>
   </nav>
 
@@ -2701,6 +2859,108 @@
       </div>
     </section>
 
+    <!-- ══════════════════════════════════════════
+         LIVING SYSTEM
+    ══════════════════════════════════════════ -->
+    <section id="living-system" class="section" aria-labelledby="ls-heading">
+      <div class="container">
+        <div class="sh">
+          <span class="sh__eyebrow">Architecture · Governance</span>
+          <h2 class="sh__title" id="ls-heading">Living System</h2>
+          <div class="sh__rule"></div>
+          <p class="sh__desc">This guide is not a static document — it is a living system designed to stay current, move with the product, and transfer cleanly to any infrastructure Claravine requires.</p>
+        </div>
+
+        <!-- Three pillars -->
+        <div class="ls-grid">
+          <div class="ls-pillar">
+            <div class="ls-pillar__icon"><span class="material-symbols-rounded">public</span></div>
+            <p class="ls-pillar__title">Accessible</p>
+            <p class="ls-pillar__body">Published continuously to a public URL via GitHub Pages. No login, no VPN, no gated PDF. Any designer, developer, or partner can reference the current standard at any time from any device.</p>
+          </div>
+          <div class="ls-pillar">
+            <div class="ls-pillar__icon"><span class="material-symbols-rounded">autorenew</span></div>
+            <p class="ls-pillar__title">Adaptable</p>
+            <p class="ls-pillar__body">Built as a single self-contained HTML file with CSS custom properties as design tokens. Updating a color, typeface, or spacing value in one place cascades across the entire guide instantly — no build step, no dependencies to manage.</p>
+          </div>
+          <div class="ls-pillar">
+            <div class="ls-pillar__icon"><span class="material-symbols-rounded">move_up</span></div>
+            <p class="ls-pillar__title">Transferable</p>
+            <p class="ls-pillar__body">The guide is a portable, dependency-light file that can be copied to any web server, embedded in an intranet, integrated into a WordPress site, or served from Claravine's own domain — without modification to the source.</p>
+          </div>
+        </div>
+
+        <!-- Version history + Migration path -->
+        <div class="ls-bottom">
+
+          <!-- Version timeline -->
+          <div>
+            <p class="ls-timeline__title">Version History</p>
+            <div class="ls-versions">
+              <div class="ls-version">
+                <p class="ls-version__tag">v1.0 · Mar 2026</p>
+                <p class="ls-version__label">Initial Release</p>
+                <p class="ls-version__notes">Core sections: Colors, Typography, Iconography, Logo Usage, Voice &amp; Tone. Published to GitHub Pages.</p>
+              </div>
+              <div class="ls-version">
+                <p class="ls-version__tag">v1.1 · Mar 2026</p>
+                <p class="ls-version__label">Motion + Responsive</p>
+                <p class="ls-version__notes">Motion &amp; Animation guide added. 6-breakpoint responsive system. Click-to-copy color swatches. SVG logo previews in downloads.</p>
+              </div>
+              <div class="ls-version">
+                <p class="ls-version__tag">v1.2 · Mar 2026</p>
+                <p class="ls-version__label">UI Components</p>
+                <p class="ls-version__notes">Button specs from live site audit. Inconsistency flags. Body text token <code style="font-size:11px;background:#f0f4f5;padding:1px 4px;border-radius:3px;">#30505A</code> standardized.</p>
+              </div>
+              <div class="ls-version ls-version--current">
+                <p class="ls-version__tag">v1.3 · Mar 2026</p>
+                <p class="ls-version__label">Living System — Current</p>
+                <p class="ls-version__notes">Architecture defined. Migration path documented. Project instructions generated for ongoing AI-assisted maintenance.</p>
+              </div>
+              <div class="ls-version" style="opacity:0.45;">
+                <p class="ls-version__tag">v1.4 · Planned</p>
+                <p class="ls-version__label">Accessibility &amp; Email</p>
+                <p class="ls-version__notes">WCAG contrast ratios, email template specs, social asset guidelines, Figma token sync.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Migration path -->
+          <div class="ls-migration">
+            <div class="ls-hosted-badge">
+              <span class="material-symbols-rounded" style="font-size:14px;">dns</span>
+              Currently hosted: GitHub Pages
+            </div>
+            <p class="ls-migration__title">Migration to Internal Servers</p>
+            <p class="ls-migration__body">When Claravine is ready to host this guide on internal infrastructure — as a subdomain, within claravine.com, or on a private intranet — the migration requires no code changes. The guide is a single portable file with no server-side dependencies.</p>
+            <div class="ls-steps">
+              <div class="ls-step">
+                <p class="ls-step__num">Step 01</p>
+                <p class="ls-step__label">Export from GitHub</p>
+                <p class="ls-step__body">Clone or download the repo. The entire guide is <code style="font-size:10px;opacity:0.75;">index.html</code> plus <code style="font-size:10px;opacity:0.75;">assets/logos/</code>.</p>
+              </div>
+              <div class="ls-step">
+                <p class="ls-step__num">Step 02</p>
+                <p class="ls-step__label">Place on any web server</p>
+                <p class="ls-step__body">Drop the files onto Apache, Nginx, S3, or any static host. No build step, no Node, no database.</p>
+              </div>
+              <div class="ls-step">
+                <p class="ls-step__num">Step 03</p>
+                <p class="ls-step__label">Point a subdomain</p>
+                <p class="ls-step__body">Serve at <code style="font-size:10px;opacity:0.75;">brand.claravine.com</code> or embed within the existing WordPress site as a static page.</p>
+              </div>
+              <div class="ls-step">
+                <p class="ls-step__num">Step 04</p>
+                <p class="ls-step__label">Optional: self-host fonts</p>
+                <p class="ls-step__body">Replace Google Fonts CDN links with locally hosted Poppins &amp; Roboto WOFF2 files for full offline capability.</p>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /ls-bottom -->
+      </div>
+    </section>
+
   </main>
 
   <!-- ══════════════════════════════════════════
@@ -2719,7 +2979,7 @@
         © 2026 Claravine. The Data Standards Company™. No Data Drama®. All rights reserved.<br>
         770 E. Main Street #360, Lehi, Utah 84043 · <a href="mailto:info@claravine.com" style="color:var(--cv-green);">info@claravine.com</a>
       </p>
-      <span class="footer__version">Brand Standards v1.0 · Last updated March 2026</span>
+      <span class="footer__version">Brand Standards v1.3 · Last updated March 2026</span>
     </div>
   </footer>
 
