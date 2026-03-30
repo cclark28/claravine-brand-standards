@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="Claravine Brand Standards — Brand design system for color, typography, iconography, logo usage, and voice guidelines.">
   <title>Claravine Brand Standards — v1.4</title>
 
@@ -164,7 +164,9 @@
       z-index: 200;
       overflow: hidden;
       box-shadow: 2px 0 20px rgba(0,0,0,0.18);
-      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+      /* GPU-composited slide — avoids paint on every frame */
+      will-change: transform;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
     }
     .sidebar__header {
       padding: var(--sp-5) var(--sp-5) var(--sp-4);
@@ -306,14 +308,26 @@
       position: sticky;
       top: 0;
       z-index: 150;
-      height: var(--topbar-h);
+      /* Safe-area-aware height: extends behind notch/status bar on iOS */
+      min-height: var(--topbar-h);
       background: var(--cv-dark);
-      padding: 0 var(--sp-4);
+      padding: env(safe-area-inset-top, 0px) var(--sp-4) 0;
+      padding-left:  max(var(--sp-4), env(safe-area-inset-left,  0px));
+      padding-right: max(var(--sp-4), env(safe-area-inset-right, 0px));
       align-items: center;
       justify-content: space-between;
       gap: var(--sp-3);
       box-shadow: 0 1px 0 rgba(255,255,255,0.07);
       flex-shrink: 0;
+    }
+    /* Spacer ensures content stays below the safe-area padding */
+    .mobile-topbar__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-3);
+      width: 100%;
+      height: var(--topbar-h);
     }
     .mobile-topbar__logo { display: block; }
     .mobile-topbar__logo svg { height: 20px; width: auto; }
@@ -328,32 +342,49 @@
       border-radius: 100px;
       white-space: nowrap;
     }
+    /* 44×44px minimum touch target — Apple HIG & WCAG 2.5.5 */
     .mobile-menu-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
+      width: 44px;
+      height: 44px;
       background: rgba(255,255,255,0.08);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: var(--radius-sm);
       cursor: pointer;
       color: rgba(255,255,255,0.7);
       flex-shrink: 0;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
     }
-    .mobile-menu-btn .material-symbols-rounded { font-size: 20px; }
-    .mobile-menu-btn:hover { background: rgba(255,255,255,0.14); color: white; }
+    .mobile-menu-btn .material-symbols-rounded {
+      font-size: 22px;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .mobile-menu-btn:hover  { background: rgba(255,255,255,0.14); color: white; }
+    .mobile-menu-btn:active { background: rgba(255,255,255,0.22); transform: scale(0.94); }
 
     .sidebar-overlay {
-      display: none;
       position: fixed;
       inset: 0;
       background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
       z-index: 190;
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
+      /* opacity+visibility lets us transition in/out smoothly.
+         display:none would block transitions entirely. */
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        opacity    0.3s cubic-bezier(0.4,0,0.2,1),
+        visibility 0.3s cubic-bezier(0.4,0,0.2,1);
     }
-    .sidebar-overlay.is-visible { display: block; }
+    .sidebar-overlay.is-visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
 
     /* ====================================================
        LAYOUT HELPERS
@@ -1042,19 +1073,71 @@
       line-height: 1.5;
     }
 
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); }
-      .sidebar.is-visible { transform: translateX(0); }
-      .mobile-topbar { display: flex; }
-      .do-dont-grid { grid-template-columns: 1fr; }
-      .ls-bottom { grid-template-columns: 1fr; }
-      .logo-dodont-grid { grid-template-columns: 1fr 1fr; }
-      .state-row { flex-wrap: wrap; }
+    /* ====================================================
+       RESPONSIVE — tablet (≤1024px)
+    ==================================================== */
+    @media (max-width: 1024px) {
+      .cv-grid       { grid-template-columns: 1fr; gap: var(--sp-5); }
+      .cv-grid--2col { grid-template-columns: 1fr; gap: var(--sp-5); }
+      .icon-grid     { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
     }
 
-    @media (max-width: 1024px) {
-      .cv-grid { grid-template-columns: 1fr; gap: var(--sp-5); }
-      .icon-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+    /* ====================================================
+       RESPONSIVE — mobile (≤768px)
+    ==================================================== */
+    @media (max-width: 768px) {
+      /* ── Sidebar: position fixed removes it from flex flow,
+             so .content expands to full viewport width ── */
+      .sidebar {
+        position: fixed;
+        top: 0; left: 0;
+        height: 100%;
+        height: 100dvh; /* dynamic viewport height — accounts for mobile browser chrome */
+        width: var(--sidebar-w);
+        transform: translateX(-100%);
+        z-index: 300;
+        /* safe-area bottom — avoids home indicator overlap on iPhone */
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .sidebar.is-visible  { transform: translateX(0); }
+
+      /* ── Overlay behind drawer, above content ── */
+      .sidebar-overlay { z-index: 290; }
+
+      /* ── Mobile topbar appears ── */
+      .mobile-topbar { display: flex; }
+
+      /* ── Sections account for sticky topbar height ── */
+      section { scroll-margin-top: calc(var(--topbar-h) + 8px); }
+
+      /* ── Reduce section padding ── */
+      .section           { padding: 40px var(--sp-4); }
+      .hero__inner       { padding: 0 var(--sp-4); }
+
+      /* ── Hero text scale ── */
+      .hero__title   { font-size: var(--text-3xl); }
+      .hero__tagline { font-size: var(--text-base); }
+      .sh__title     { font-size: var(--text-2xl); }
+
+      /* ── Grids → single column ── */
+      .do-dont-grid      { grid-template-columns: 1fr; }
+      .cv-grid           { grid-template-columns: 1fr; gap: var(--sp-4); }
+      .cv-grid--2col     { grid-template-columns: 1fr; gap: var(--sp-4); }
+      .ls-bottom         { grid-template-columns: 1fr; }
+      .logo-dodont-grid  { grid-template-columns: 1fr 1fr; }
+      .state-row         { flex-wrap: wrap; }
+
+      /* ── Color swatch cards: 2 per row ── */
+      .color-swatch-row  { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ====================================================
+       RESPONSIVE — small mobile (≤480px)
+    ==================================================== */
+    @media (max-width: 480px) {
+      .logo-dodont-grid  { grid-template-columns: 1fr; }
+      .hero__title       { font-size: var(--text-2xl); }
+      .section           { padding: 32px var(--sp-3); }
     }
 
     /* ====================================================
@@ -1378,7 +1461,7 @@
 <body>
   <div class="app-shell">
     <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="main-sidebar" aria-label="Site navigation">
       <div class="sidebar__header">
         <button class="sidebar__logo-btn" aria-label="Home">
           <div class="sidebar-logo">
@@ -1449,7 +1532,8 @@
     <div class="content" id="content">
 
       <!-- MOBILE TOPBAR -->
-      <div class="mobile-topbar">
+      <div class="mobile-topbar" role="banner">
+        <div class="mobile-topbar__inner">
         <a class="mobile-topbar__logo" href="#" aria-label="Home">
           <div class="mobile-logo">
             <svg class="mobile-logo__svg" viewBox="0 0 193 41" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Claravine">
@@ -1459,11 +1543,15 @@
           </div>
         </a>
         <span class="mobile-topbar__version">v1.4</span>
-        <button class="mobile-menu-btn" aria-label="Open menu">
-          <span class="material-symbols-rounded">menu</span>
+        <button class="mobile-menu-btn" id="mobile-menu-btn"
+                aria-label="Open navigation"
+                aria-expanded="false"
+                aria-controls="main-sidebar">
+          <span class="material-symbols-rounded" aria-hidden="true">menu</span>
         </button>
-      </div>
-      <div class="sidebar-overlay"></div>
+        </div><!-- /.mobile-topbar__inner -->
+      </div><!-- /.mobile-topbar -->
+      <div class="sidebar-overlay" aria-hidden="true"></div>
 
       <!-- OVERVIEW / HERO -->
       <section id="overview" class="hero" aria-labelledby="overview-heading">
@@ -2736,6 +2824,8 @@
         if (section) {
           section.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        // Close drawer after navigation on mobile
+        if (window.innerWidth <= 768) { closeDrawer(); }
       });
     });
 
@@ -2795,24 +2885,114 @@
       });
     }
 
-    // MOBILE MENU
+    // ─────────────────────────────────────────────────────
+    // MOBILE MENU — drawer with full UX treatment
+    // ─────────────────────────────────────────────────────
     const sidebarOverlay = document.querySelector('.sidebar-overlay');
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const mobileMenuBtn  = document.getElementById('mobile-menu-btn');
+    const menuIcon       = mobileMenuBtn?.querySelector('.material-symbols-rounded');
+
+    /** Open the navigation drawer */
+    function openDrawer() {
+      sidebar.classList.add('is-visible');
+      if (sidebarOverlay) sidebarOverlay.classList.add('is-visible');
+
+      // Prevent body scroll bleed-through
+      document.body.style.overflow = 'hidden';
+
+      // ARIA — mark button as expanded, sidebar as visible
+      mobileMenuBtn?.setAttribute('aria-expanded', 'true');
+      mobileMenuBtn?.setAttribute('aria-label', 'Close navigation');
+      if (menuIcon) menuIcon.textContent = 'close';
+
+      // Focus the first focusable nav item for keyboard / AT users
+      const firstItem = sidebar.querySelector('.sidebar__item');
+      if (firstItem) firstItem.focus();
+    }
+
+    /** Close the navigation drawer */
+    function closeDrawer() {
+      sidebar.classList.remove('is-visible');
+      if (sidebarOverlay) sidebarOverlay.classList.remove('is-visible');
+
+      // Restore body scroll
+      document.body.style.overflow = '';
+
+      // ARIA — restore button state
+      mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+      mobileMenuBtn?.setAttribute('aria-label', 'Open navigation');
+      if (menuIcon) menuIcon.textContent = 'menu';
+
+      // Return focus to the trigger button
+      mobileMenuBtn?.focus();
+    }
+
+    /** Only run mobile interactions when the topbar is visible */
+    const isMobileBreakpoint = () => window.innerWidth <= 768;
 
     if (mobileMenuBtn) {
+      // ── Hamburger tap ──
       mobileMenuBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('is-visible');
-        if (sidebarOverlay) {
-          sidebarOverlay.classList.toggle('is-visible');
+        if (sidebar.classList.contains('is-visible')) {
+          closeDrawer();
+        } else {
+          openDrawer();
         }
       });
 
+      // ── Overlay tap ──
       if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', () => {
-          sidebar.classList.remove('is-visible');
-          sidebarOverlay.classList.remove('is-visible');
-        });
+        sidebarOverlay.addEventListener('click', closeDrawer);
       }
+
+      // ── Escape key ──
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('is-visible')) {
+          closeDrawer();
+        }
+      });
+
+      // ── Swipe-to-close (left swipe on the drawer) ──
+      // Track touch start X; if the user swipes left ≥50px, close.
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      sidebar.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      sidebar.addEventListener('touchend', (e) => {
+        if (!sidebar.classList.contains('is-visible')) return;
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
+        // Only register horizontal swipes (deltaX dominant, threshold 50px)
+        if (deltaX < -50 && Math.abs(deltaY) < Math.abs(deltaX)) {
+          closeDrawer();
+        }
+      }, { passive: true });
+
+      // ── Focus trap — keep Tab/Shift+Tab inside the drawer ──
+      sidebar.addEventListener('keydown', (e) => {
+        if (!sidebar.classList.contains('is-visible') || e.key !== 'Tab') return;
+        const focusable = Array.from(
+          sidebar.querySelectorAll('button, [href], input, [tabindex]:not([tabindex="-1"])')
+        ).filter(el => !el.disabled);
+        const first = focusable[0];
+        const last  = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+        }
+      });
+
+      // ── Clean up scroll lock if window resizes past mobile breakpoint ──
+      window.addEventListener('resize', () => {
+        if (!isMobileBreakpoint() && sidebar.classList.contains('is-visible')) {
+          closeDrawer();
+        }
+      });
     }
   </script>
 </body>
