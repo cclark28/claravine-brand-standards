@@ -2047,10 +2047,10 @@
 
     const updateWeather = async () => {
       try {
-        const response = await fetch('https://wttr.in/Lehi+Utah?format=%C+%t', { mode: 'no-cors' });
+        const response = await fetch('https://wttr.in/Lehi+Utah?format=%C+%t');
         if (response.ok) {
           const text = await response.text();
-          document.getElementById('current-weather').textContent = text;
+          document.getElementById('current-weather').textContent = text.trim();
         }
       } catch (e) {
         // Weather unavailable
