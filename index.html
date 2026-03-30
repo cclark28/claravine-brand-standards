@@ -110,6 +110,8 @@
       /* ── Layout ── */
       --max-w:      1440px;
       --nav-h:      64px;
+      --sidebar-w:  240px;
+      --topbar-h:   52px;
       --sec-pad:    80px;
       --radius-sm:  4px;
       --radius-md:  8px;
@@ -135,64 +137,207 @@
     a { color: inherit; }
 
     /* ====================================================
-       NAVIGATION
+       APP SHELL + SIDEBAR
     ==================================================== */
-    .nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: var(--nav-h);
+    .app-shell {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-width: var(--sidebar-w);
+      height: 100vh;
       background: var(--cv-dark);
       display: flex;
-      align-items: center;
-      z-index: 100;
-      box-shadow: 0 1px 0 rgba(255,255,255,0.07);
+      flex-direction: column;
+      flex-shrink: 0;
+      z-index: 200;
+      overflow: hidden;
+      box-shadow: 2px 0 20px rgba(0,0,0,0.18);
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
     }
-    .nav__inner {
-      max-width: var(--max-w);
+    .sidebar__header {
+      padding: var(--sp-5) var(--sp-5) var(--sp-4);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .sidebar__logo-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: block;
+    }
+    .sidebar__logo-btn svg { height: 22px; width: auto; }
+    .sidebar__nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--sp-4) var(--sp-3) var(--sp-5);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+    .sidebar__nav::-webkit-scrollbar { width: 4px; }
+    .sidebar__nav::-webkit-scrollbar-track { background: transparent; }
+    .sidebar__nav::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.12);
+      border-radius: 4px;
+    }
+    .sidebar__group { margin-bottom: var(--sp-5); }
+    .sidebar__group:last-child { margin-bottom: 0; }
+    .sidebar__label {
+      display: block;
+      font-family: var(--font-primary);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.26);
+      padding: 0 var(--sp-3);
+      margin-bottom: var(--sp-2);
+    }
+    .sidebar__list { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+    .sidebar__item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       width: 100%;
-      margin: 0 auto;
-      padding: 0 var(--sp-6);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--sp-4);
-    }
-    .nav__logo { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
-    .nav__logo svg { height: 26px; }
-    .nav__links {
-      display: flex;
-      align-items: center;
-      gap: var(--sp-5);
-      list-style: none;
-    }
-    .nav__links a {
-      color: rgba(255,255,255,0.65);
-      text-decoration: none;
+      padding: 8px var(--sp-3);
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      color: rgba(255,255,255,0.50);
       font-family: var(--font-primary);
       font-size: var(--text-sm);
-      font-weight: 400;
+      font-weight: 500;
       letter-spacing: 0.01em;
-      transition: color 0.18s;
+      transition: background 0.14s, color 0.14s;
       white-space: nowrap;
     }
-    .nav__links a:hover { color: var(--cv-green); }
-    .nav__version {
+    .sidebar__item .material-symbols-rounded {
+      font-size: 17px;
+      flex-shrink: 0;
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+      transition: font-variation-settings 0.14s;
+    }
+    .sidebar__item:hover {
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.88);
+    }
+    .sidebar__item.is-active {
+      background: rgba(93,211,158,0.14);
+      color: var(--cv-green);
+      font-weight: 600;
+    }
+    .sidebar__item.is-active .material-symbols-rounded {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    .sidebar__footer {
+      padding: var(--sp-4) var(--sp-5);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .sidebar__version {
+      display: inline-block;
       font-family: var(--font-primary);
-      font-size: var(--text-xs);
+      font-size: 11px;
       font-weight: 600;
       color: var(--cv-green);
       background: rgba(93,211,158,0.12);
-      border: 1px solid rgba(93,211,158,0.28);
+      border: 1px solid rgba(93,211,158,0.22);
       padding: 3px 10px;
       border-radius: 100px;
-      white-space: nowrap;
+    }
+
+    /* ── Main content area ── */
+    .content {
+      flex: 1;
+      min-width: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      background: var(--cv-white);
+    }
+
+    /* ── Panel system ── */
+    .cv-panel {
+      display: none;
+      flex: 1;
+    }
+    .cv-panel--active {
+      display: block;
+      animation: panel-in 0.22s cubic-bezier(0.2,0,0.4,1) both;
+    }
+    @keyframes panel-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Mobile top bar ── */
+    .mobile-topbar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 150;
+      height: var(--topbar-h);
+      background: var(--cv-dark);
+      padding: 0 var(--sp-4);
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-3);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.07);
       flex-shrink: 0;
     }
+    .mobile-topbar__logo { display: block; }
+    .mobile-topbar__logo svg { height: 20px; width: auto; }
+    .mobile-topbar__version {
+      font-family: var(--font-primary);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--cv-green);
+      background: rgba(93,211,158,0.12);
+      border: 1px solid rgba(93,211,158,0.22);
+      padding: 3px 9px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+    .mobile-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: rgba(255,255,255,0.7);
+      flex-shrink: 0;
+    }
+    .mobile-menu-btn .material-symbols-rounded { font-size: 20px; }
+    .mobile-menu-btn:hover { background: rgba(255,255,255,0.14); color: white; }
+
+    /* ── Sidebar overlay (mobile) ── */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 190;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+    .sidebar-overlay.is-visible { display: block; }
 
     /* ====================================================
        LAYOUT HELPERS
     ==================================================== */
-    main { padding-top: var(--nav-h); }
+    /* panel-based layout — no top padding needed on main */
 
     .section { padding: var(--sec-pad) var(--sp-6); }
     .section--dark { background: var(--cv-dark); color: var(--cv-white); }
@@ -1618,39 +1763,49 @@
     }
 
     /* ====================================================
-       RESPONSIVE — 6 BREAKPOINTS
+       RESPONSIVE SYSTEM
     ==================================================== */
 
-    /* 1600px — ultra-wide cap */
+    /* ── 1600px ultra-wide ── */
     @media (min-width: 1600px) {
-      :root { --sec-pad: 100px; }
+      :root { --sec-pad: 100px; --sidebar-w: 260px; }
       .hero { min-height: 80vh; }
       .hero__title { font-size: clamp(3.5rem, 5vw, 5.5rem); }
     }
 
-    /* 1280px — wide desktop */
+    /* ── 1280px wide desktop ── */
     @media (max-width: 1280px) {
-      :root { --max-w: 1180px; }
+      :root { --max-w: 1100px; }
     }
 
-    /* 1024px — standard desktop */
+    /* ── 1024px standard desktop ── */
     @media (max-width: 1024px) {
+      :root { --sidebar-w: 220px; }
       .cv-grid { grid-template-columns: 1fr 2fr; }
       .cv-grid > *:nth-child(3) { grid-column: 1 / -1; }
       .primary-swatches { grid-template-columns: repeat(2, 1fr); }
       .motion-grid { grid-template-columns: repeat(2, 1fr); }
-      .motion-demo-wrap { grid-template-columns: repeat(3, 1fr); }
     }
 
-    /* 768px — tablet */
+    /* ── 768px — sidebar becomes off-canvas overlay ── */
     @media (max-width: 768px) {
+      :root { --sec-pad: 60px; }
+      .app-shell { overflow: visible; height: auto; min-height: 100dvh; }
+      .sidebar {
+        position: fixed;
+        top: 0; left: 0;
+        height: 100%;
+        transform: translateX(-100%);
+        z-index: 200;
+      }
+      .sidebar.is-open { transform: translateX(0); }
+      .content { height: auto; min-height: 100dvh; overflow-y: visible; }
+      .cv-panel { flex: none; }
+      .mobile-topbar { display: flex; }
       .ls-grid { grid-template-columns: 1fr; }
       .ls-bottom { grid-template-columns: 1fr; }
       .ls-steps { grid-template-columns: repeat(2, 1fr); }
       .comp-grid { grid-template-columns: 1fr; }
-      :root { --sec-pad: 64px; --nav-h: 56px; }
-      .nav__links { display: none; }
-      .nav__inner { padding: 0 var(--sp-4); }
       .cv-grid, .cv-grid--2col { grid-template-columns: 1fr; }
       .cv-grid > *:nth-child(3) { grid-column: auto; }
       .principle-cards { grid-template-columns: 1fr 1fr; }
@@ -1661,16 +1816,16 @@
       .sec-swatches { grid-template-columns: 1fr 1fr; }
       .type-card__weights { grid-template-columns: 1fr 1fr; }
       .motion-grid { grid-template-columns: 1fr; }
-      .motion-demo-wrap { grid-template-columns: 1fr 1fr 1fr; }
+      .motion-demo-wrap { grid-template-columns: repeat(3, 1fr); }
       .sh__title { font-size: clamp(1.6rem, 4vw, 2rem); }
     }
 
-    /* 480px — large mobile */
+    /* ── 480px large mobile ── */
     @media (max-width: 480px) {
-      .ls-steps { grid-template-columns: 1fr; }
       :root { --sec-pad: 48px; }
       .section { padding: var(--sec-pad) var(--sp-3); }
-      .hero { min-height: 70vh; padding: 72px var(--sp-3) 56px; }
+      .hero { min-height: 70vh; }
+      .hero__inner { padding: var(--sp-7) var(--sp-3); }
       .hero__title { font-size: clamp(2rem, 9vw, 2.8rem); }
       .primary-swatches { grid-template-columns: 1fr 1fr; }
       .dl-grid { grid-template-columns: 1fr; }
@@ -1680,13 +1835,14 @@
       .motion-demo-wrap { grid-template-columns: 1fr; }
       .duration-row__use { display: none; }
       .icon-sizes { flex-wrap: wrap; padding: var(--sp-4); gap: var(--sp-4); }
+      .ls-steps { grid-template-columns: 1fr; }
     }
 
-    /* 320px — small mobile */
+    /* ── 375px small mobile ── */
     @media (max-width: 375px) {
       :root { --sec-pad: 40px; }
       .section { padding: var(--sec-pad) var(--sp-3); }
-      .hero { padding: 64px var(--sp-3) 48px; }
+      .hero__inner { padding: var(--sp-6) var(--sp-3); }
       .hero__title { font-size: clamp(1.75rem, 8vw, 2.4rem); }
       .primary-swatches { grid-template-columns: 1fr; }
       .sec-swatches { grid-template-columns: 1fr; }
@@ -1694,45 +1850,101 @@
       .grad-strip__cell { height: 48px; }
       .grad-hex { display: none; }
       .type-card__weights { grid-template-columns: 1fr; }
-      .nav__version { display: none; }
       .hero__tags { gap: var(--sp-2); }
     }
   </style>
 </head>
 <body>
 
+<div class="app-shell">
+
   <!-- ══════════════════════════════════════════
-       NAVIGATION
+       SIDEBAR
   ══════════════════════════════════════════ -->
-  <nav class="nav" aria-label="Main navigation">
-    <div class="nav__inner">
-      <a href="#" class="nav__logo" aria-label="Claravine Brand Standards">
-        <!-- White wordmark for dark nav -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar__header">
+      <button class="sidebar__logo-btn" id="home-btn" aria-label="Go to home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 193 41" fill="none" role="img" aria-label="Claravine"><path d="M46.0059 8.93848C50.5063 8.93848 55.918 9.97743 55.918 15.6299V27.8945H55.9043C55.9043 30.0371 56.139 32.1801 56.6982 33.1396H50.4023C50.1942 32.4036 50.0127 31.6407 49.9736 30.8652C47.9965 33.0079 45.1345 33.7832 42.377 33.7832C38.0977 33.7831 34.6904 31.5483 34.6904 26.7109C34.6905 21.3875 38.527 20.0995 42.377 19.5605C46.188 18.969 49.7128 19.2315 49.7129 16.458C49.7129 13.6845 47.8794 13.2637 45.6943 13.2637C43.327 13.2637 41.8051 14.2629 41.584 16.8262H35.3799C35.7311 10.7532 40.9332 8.93857 46.0059 8.93848ZM174.309 8.89941C181.983 8.89941 185.703 15.6432 185.261 22.8994H168.976C169.145 27.0135 171.07 28.8798 174.517 28.8799C174.907 28.8799 175.284 28.8406 175.648 28.7617V33.6914C175.193 33.7308 174.751 33.7568 174.296 33.7568C167.168 33.7568 162.759 28.4465 162.759 21.3613C162.759 14.276 167.441 8.89941 174.296 8.89941H174.309ZM88.2012 8.89941C92.7015 8.89941 98.113 9.93779 98.1133 15.5898V27.8545C98.1133 29.997 98.334 32.1399 98.9062 33.0996H92.6113C92.4032 32.3635 92.2207 31.6007 92.1816 30.8252C90.2046 32.9679 87.3298 33.7441 84.5723 33.7441C80.3061 33.744 76.8985 31.5091 76.8984 26.6719C76.8984 21.3482 80.7353 20.0595 84.5723 19.5205C88.3834 18.929 91.9219 19.1916 91.9219 16.418C91.9217 13.6448 90.0744 13.2246 87.9023 13.2246C85.5352 13.2246 84.0132 14.2231 83.792 16.7861H77.5879C77.9263 10.7135 83.1286 8.89952 88.2012 8.89941ZM11.498 8.71582C12.4996 8.71582 13.4756 8.83362 14.4121 9.04395C14.6721 9.09651 14.9063 9.16184 15.1533 9.22754C15.2443 9.2538 15.3222 9.26771 15.4131 9.29395C15.4651 9.30709 15.531 9.32039 15.583 9.34668C19.1076 10.4904 21.826 13.2242 22.1123 17.6406H16.0508C15.6605 14.9988 14.0477 13.7374 11.4727 13.7373C7.50553 13.7373 6.19144 17.7723 6.19141 21.2295C6.19141 25.4096 7.93432 28.3281 11.3291 28.3281C13.5923 28.3281 14.8806 27.3157 15.583 26.0537V26.0938H21.7744C20.3696 30.9048 16.5706 33.5205 11.3809 33.5205C4.57835 33.5203 1.25194e-05 28.788 0 21.4531C0 14.1182 4.1882 8.71595 11.498 8.71582ZM151.338 8.91211C157.932 8.91211 159.598 12.7902 159.598 18.6396V33.1396H153.394V19.8096C153.393 15.932 152.301 14.0264 149.413 14.0264C146.044 14.0264 144.601 15.9847 144.601 20.7695V33.165H138.396V9.54395H144.288V12.8301H144.418C145.992 10.1747 148.711 8.89941 151.325 8.89941L151.338 8.91211ZM31.6982 33.1523H24.9736V0.81543H31.6982V33.1523ZM74.0371 9.79297C74.4793 9.79302 74.9995 9.89885 75.3896 10.0303V16.3262C74.8303 16.1816 73.9064 16.0898 73.165 16.0898C68.6259 16.09 67.0519 19.5075 67.0518 23.6611V33.1523H60.8477V10.1348H66.7402V14.8018H66.8174L66.8311 14.8145C67.9758 11.8438 71.0196 9.79297 74.0371 9.79297ZM132.23 33.1523H126.026V9.79297H132.23V33.1523ZM111.602 25.6465H111.705L116.466 9.53027H122.618L114.983 33.126H108.076L100.35 9.53027H106.854L111.602 25.6465ZM49.7266 21.5977C48.686 22.5573 46.5003 22.6099 44.5752 22.9648C42.6502 23.3855 40.9072 24.0038 40.9072 26.4355C40.9074 28.8669 42.6893 29.4452 44.7051 29.4453C49.5567 29.4453 49.7266 25.4358 49.7266 24.0293V21.5977ZM91.9082 21.5713C90.8676 22.5307 88.6697 22.5704 86.7578 22.9385C84.8328 23.3591 83.0898 23.9905 83.0898 26.4092C83.09 28.8275 84.8718 29.4189 86.8877 29.4189C91.7394 29.4189 91.9082 25.4095 91.9082 24.0029V21.5713ZM174.14 13.7764C170.211 13.7764 169.067 16.9707 168.989 18.7979H179.069C178.497 15.5116 177.144 13.7764 174.14 13.7764ZM132.205 6.44141H126.026V0H132.205V6.44141Z" fill="#FFFFFF"/><path d="M181.19 28.6304V41.0001H186.483V34.204H193V28.6304H181.19Z" fill="#5DD39E"/></svg>
+      </button>
+    </div>
+    <nav class="sidebar__nav" aria-label="Brand sections">
+      <div class="sidebar__group">
+        <span class="sidebar__label">Brand System</span>
+        <ul class="sidebar__list" role="list">
+          <li><button class="sidebar__item" data-panel="overview">
+            <span class="material-symbols-rounded">grid_view</span>Overview
+          </button></li>
+          <li><button class="sidebar__item" data-panel="colors">
+            <span class="material-symbols-rounded">palette</span>Colors
+          </button></li>
+          <li><button class="sidebar__item" data-panel="typography">
+            <span class="material-symbols-rounded">text_fields</span>Typography
+          </button></li>
+          <li><button class="sidebar__item" data-panel="components">
+            <span class="material-symbols-rounded">widgets</span>Components
+          </button></li>
+          <li><button class="sidebar__item" data-panel="iconography">
+            <span class="material-symbols-rounded">category</span>Iconography
+          </button></li>
+          <li><button class="sidebar__item" data-panel="logo">
+            <span class="material-symbols-rounded">star</span>Logo Usage
+          </button></li>
+        </ul>
+      </div>
+      <div class="sidebar__group">
+        <span class="sidebar__label">Guidelines</span>
+        <ul class="sidebar__list" role="list">
+          <li><button class="sidebar__item" data-panel="voice">
+            <span class="material-symbols-rounded">record_voice_over</span>Voice &amp; Tone
+          </button></li>
+          <li><button class="sidebar__item" data-panel="motion">
+            <span class="material-symbols-rounded">animation</span>Motion
+          </button></li>
+        </ul>
+      </div>
+      <div class="sidebar__group">
+        <span class="sidebar__label">Resources</span>
+        <ul class="sidebar__list" role="list">
+          <li><button class="sidebar__item" data-panel="downloads">
+            <span class="material-symbols-rounded">download</span>Downloads
+          </button></li>
+          <li><button class="sidebar__item" data-panel="living">
+            <span class="material-symbols-rounded">autorenew</span>Living System
+          </button></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="sidebar__footer">
+      <span class="sidebar__version">v1.4 · Mar 2026</span>
+    </div>
+  </aside>
+
+  <!-- Sidebar overlay (mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════════
+       CONTENT AREA
+  ══════════════════════════════════════════ -->
+  <main class="content" id="content">
+
+    <!-- Mobile top bar -->
+    <header class="mobile-topbar" role="banner">
+      <button class="mobile-menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false">
+        <span class="material-symbols-rounded">menu</span>
+      </button>
+      <a href="#" class="mobile-topbar__logo" id="mobile-home-btn" aria-label="Claravine home">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 193 41" fill="none" role="img" aria-label="Claravine"><path d="M46.0059 8.93848C50.5063 8.93848 55.918 9.97743 55.918 15.6299V27.8945H55.9043C55.9043 30.0371 56.139 32.1801 56.6982 33.1396H50.4023C50.1942 32.4036 50.0127 31.6407 49.9736 30.8652C47.9965 33.0079 45.1345 33.7832 42.377 33.7832C38.0977 33.7831 34.6904 31.5483 34.6904 26.7109C34.6905 21.3875 38.527 20.0995 42.377 19.5605C46.188 18.969 49.7128 19.2315 49.7129 16.458C49.7129 13.6845 47.8794 13.2637 45.6943 13.2637C43.327 13.2637 41.8051 14.2629 41.584 16.8262H35.3799C35.7311 10.7532 40.9332 8.93857 46.0059 8.93848ZM174.309 8.89941C181.983 8.89941 185.703 15.6432 185.261 22.8994H168.976C169.145 27.0135 171.07 28.8798 174.517 28.8799C174.907 28.8799 175.284 28.8406 175.648 28.7617V33.6914C175.193 33.7308 174.751 33.7568 174.296 33.7568C167.168 33.7568 162.759 28.4465 162.759 21.3613C162.759 14.276 167.441 8.89941 174.296 8.89941H174.309ZM88.2012 8.89941C92.7015 8.89941 98.113 9.93779 98.1133 15.5898V27.8545C98.1133 29.997 98.334 32.1399 98.9062 33.0996H92.6113C92.4032 32.3635 92.2207 31.6007 92.1816 30.8252C90.2046 32.9679 87.3298 33.7441 84.5723 33.7441C80.3061 33.744 76.8985 31.5091 76.8984 26.6719C76.8984 21.3482 80.7353 20.0595 84.5723 19.5205C88.3834 18.929 91.9219 19.1916 91.9219 16.418C91.9217 13.6448 90.0744 13.2246 87.9023 13.2246C85.5352 13.2246 84.0132 14.2231 83.792 16.7861H77.5879C77.9263 10.7135 83.1286 8.89952 88.2012 8.89941ZM11.498 8.71582C12.4996 8.71582 13.4756 8.83362 14.4121 9.04395C14.6721 9.09651 14.9063 9.16184 15.1533 9.22754C15.2443 9.2538 15.3222 9.26771 15.4131 9.29395C15.4651 9.30709 15.531 9.32039 15.583 9.34668C19.1076 10.4904 21.826 13.2242 22.1123 17.6406H16.0508C15.6605 14.9988 14.0477 13.7374 11.4727 13.7373C7.50553 13.7373 6.19144 17.7723 6.19141 21.2295C6.19141 25.4096 7.93432 28.3281 11.3291 28.3281C13.5923 28.3281 14.8806 27.3157 15.583 26.0537V26.0938H21.7744C20.3696 30.9048 16.5706 33.5205 11.3809 33.5205C4.57835 33.5203 1.25194e-05 28.788 0 21.4531C0 14.1182 4.1882 8.71595 11.498 8.71582ZM151.338 8.91211C157.932 8.91211 159.598 12.7902 159.598 18.6396V33.1396H153.394V19.8096C153.393 15.932 152.301 14.0264 149.413 14.0264C146.044 14.0264 144.601 15.9847 144.601 20.7695V33.165H138.396V9.54395H144.288V12.8301H144.418C145.992 10.1747 148.711 8.89941 151.325 8.89941L151.338 8.91211ZM31.6982 33.1523H24.9736V0.81543H31.6982V33.1523ZM74.0371 9.79297C74.4793 9.79302 74.9995 9.89885 75.3896 10.0303V16.3262C74.8303 16.1816 73.9064 16.0898 73.165 16.0898C68.6259 16.09 67.0519 19.5075 67.0518 23.6611V33.1523H60.8477V10.1348H66.7402V14.8018H66.8174L66.8311 14.8145C67.9758 11.8438 71.0196 9.79297 74.0371 9.79297ZM132.23 33.1523H126.026V9.79297H132.23V33.1523ZM111.602 25.6465H111.705L116.466 9.53027H122.618L114.983 33.126H108.076L100.35 9.53027H106.854L111.602 25.6465ZM49.7266 21.5977C48.686 22.5573 46.5003 22.6099 44.5752 22.9648C42.6502 23.3855 40.9072 24.0038 40.9072 26.4355C40.9074 28.8669 42.6893 29.4452 44.7051 29.4453C49.5567 29.4453 49.7266 25.4358 49.7266 24.0293V21.5977ZM91.9082 21.5713C90.8676 22.5307 88.6697 22.5704 86.7578 22.9385C84.8328 23.3591 83.0898 23.9905 83.0898 26.4092C83.09 28.8275 84.8718 29.4189 86.8877 29.4189C91.7394 29.4189 91.9082 25.4095 91.9082 24.0029V21.5713ZM174.14 13.7764C170.211 13.7764 169.067 16.9707 168.989 18.7979H179.069C178.497 15.5116 177.144 13.7764 174.14 13.7764ZM132.205 6.44141H126.026V0H132.205V6.44141Z" fill="#FFFFFF"/><path d="M181.19 28.6304V41.0001H186.483V34.204H193V28.6304H181.19Z" fill="#5DD39E"/></svg>
       </a>
-      <ul class="nav__links" role="list">
-        <li><a href="#overview">Overview</a></li>
-        <li><a href="#colors">Colors</a></li>
-        <li><a href="#typography">Typography</a></li>
-        <li><a href="#components">Components</a></li>
-        <li><a href="#iconography">Iconography</a></li>
-        <li><a href="#logo">Logo</a></li>
-        <li><a href="#voice">Voice &amp; Tone</a></li>
-        <li><a href="#motion">Motion</a></li>
-        <li><a href="#downloads">Downloads</a></li>
-        <li><a href="#living-system">Living System</a></li>
-      </ul>
-      <span class="nav__version">v1.4 · Mar 2026</span>
-    </div>
-  </nav>
-
-  <main>
+      <span class="mobile-topbar__version">v1.4</span>
+    </header>
 
     <!-- ══════════════════════════════════════════
          HERO — Animated Gradient (v1.4)
          Animation Standard: §2 gradient, §3 SMIL +
          CSS ping-pong, §3.2 breathing, §3.3 fallback
     ══════════════════════════════════════════ -->
+    <!-- Panel: home -->
+    <div class="cv-panel cv-panel--active" id="panel-home">
     <section class="hero" id="cv-hero" aria-label="Brand guide hero">
 
       <!-- §2 + §3: Inline SVG gradient with SMIL animation -->
@@ -1791,10 +2003,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          OVERVIEW
     ══════════════════════════════════════════ -->
+    <!-- Panel: overview -->
+    <div class="cv-panel" id="panel-overview">
     <section id="overview" class="section" aria-labelledby="overview-heading">
       <div class="container">
         <div class="cv-grid">
@@ -1845,10 +2061,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          COLOR SYSTEM
     ══════════════════════════════════════════ -->
+    <!-- Panel: colors -->
+    <div class="cv-panel" id="panel-colors">
     <section id="colors" class="section section--light" aria-labelledby="colors-heading">
       <div class="container">
         <div class="sh">
@@ -2097,10 +2317,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          TYPOGRAPHY
     ══════════════════════════════════════════ -->
+    <!-- Panel: typography -->
+    <div class="cv-panel" id="panel-typography">
     <section id="typography" class="section" aria-labelledby="type-heading">
       <div class="container">
         <div class="cv-grid">
@@ -2228,10 +2452,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          UI COMPONENTS
     ══════════════════════════════════════════ -->
+    <!-- Panel: components -->
+    <div class="cv-panel" id="panel-components">
     <section id="components" class="section" aria-labelledby="comp-heading">
       <div class="container">
         <div class="sh">
@@ -2346,10 +2574,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          ICONOGRAPHY
     ══════════════════════════════════════════ -->
+    <!-- Panel: iconography -->
+    <div class="cv-panel" id="panel-iconography">
     <section id="iconography" class="section section--light" aria-labelledby="icon-heading">
       <div class="container">
         <div class="cv-grid">
@@ -2480,10 +2712,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          LOGO USAGE
     ══════════════════════════════════════════ -->
+    <!-- Panel: logo -->
+    <div class="cv-panel" id="panel-logo">
     <section id="logo" class="section" aria-labelledby="logo-heading">
       <div class="container">
         <div class="cv-grid">
@@ -2618,10 +2854,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          VOICE & TONE
     ══════════════════════════════════════════ -->
+    <!-- Panel: voice -->
+    <div class="cv-panel" id="panel-voice">
     <section id="voice" class="section section--dark" aria-labelledby="voice-heading">
       <div class="container">
         <div class="cv-grid">
@@ -2708,10 +2948,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          MOTION & ANIMATION
     ══════════════════════════════════════════ -->
+    <!-- Panel: motion -->
+    <div class="cv-panel" id="panel-motion">
     <section id="motion" class="section" aria-labelledby="motion-heading">
       <div class="container">
         <div class="sh">
@@ -2812,10 +3056,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          DOWNLOADS
     ══════════════════════════════════════════ -->
+    <!-- Panel: downloads -->
+    <div class="cv-panel" id="panel-downloads">
     <section id="downloads" class="section section--light" aria-labelledby="dl-heading">
       <div class="container">
         <div class="sh">
@@ -2949,10 +3197,14 @@
         </div>
       </div>
     </section>
+    </div>
+
 
     <!-- ══════════════════════════════════════════
          LIVING SYSTEM
     ══════════════════════════════════════════ -->
+    <!-- Panel: living -->
+    <div class="cv-panel" id="panel-living">
     <section id="living-system" class="section" aria-labelledby="ls-heading">
       <div class="container">
         <div class="sh">
@@ -3052,7 +3304,6 @@
       </div>
     </section>
 
-  </main>
 
   <!-- ══════════════════════════════════════════
        FOOTER
@@ -3069,6 +3320,12 @@
       <span class="footer__version">Brand Standards v1.4 · Last updated March 2026</span>
     </div>
   </footer>
+
+    </div><!-- /panel-living -->
+
+  </main><!-- /content -->
+
+</div><!-- /.app-shell -->
 
 
 <!-- Toast notification -->
@@ -3141,6 +3398,82 @@
     anims.forEach(function(a) { a.setAttribute('dur', a._baseDur + 's'); });
   });
 })();
+</script>
+
+
+<!-- ── Panel navigation + mobile sidebar ───────────────────────────────── -->
+<script>
+(function () {
+  'use strict';
+
+  var panels    = document.querySelectorAll('.cv-panel');
+  var navBtns   = document.querySelectorAll('.sidebar__item[data-panel]');
+  var sidebar   = document.getElementById('sidebar');
+  var overlay   = document.getElementById('sidebar-overlay');
+  var menuBtn   = document.getElementById('menu-btn');
+  var homeBtn   = document.getElementById('home-btn');
+  var mobileHome= document.getElementById('mobile-home-btn');
+  var content   = document.getElementById('content');
+
+  /* Show a named panel */
+  function showPanel(id) {
+    panels.forEach(function (p) { p.classList.remove('cv-panel--active'); });
+    navBtns.forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-current', 'false'); });
+
+    var target = document.getElementById('panel-' + id);
+    if (!target) { showHome(); return; }
+    target.classList.add('cv-panel--active');
+
+    var btn = document.querySelector('.sidebar__item[data-panel="' + id + '"]');
+    if (btn) { btn.classList.add('is-active'); btn.setAttribute('aria-current', 'true'); }
+
+    if (content) content.scrollTop = 0;
+    history.replaceState(null, '', '#' + id);
+    closeSidebar();
+  }
+
+  /* Show home (hero) */
+  function showHome() {
+    panels.forEach(function (p) { p.classList.remove('cv-panel--active'); });
+    navBtns.forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-current', 'false'); });
+    var home = document.getElementById('panel-home');
+    if (home) home.classList.add('cv-panel--active');
+    if (content) content.scrollTop = 0;
+    history.replaceState(null, '', window.location.pathname);
+    closeSidebar();
+  }
+
+  /* Mobile sidebar */
+  function openSidebar()  {
+    sidebar.classList.add('is-open');
+    overlay.classList.add('is-visible');
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar() {
+    sidebar.classList.remove('is-open');
+    overlay.classList.remove('is-visible');
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  /* Wire events */
+  navBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () { showPanel(this.getAttribute('data-panel')); });
+  });
+  if (homeBtn)    homeBtn.addEventListener('click',    function (e) { e.preventDefault(); showHome(); });
+  if (mobileHome) mobileHome.addEventListener('click', function (e) { e.preventDefault(); showHome(); });
+  if (menuBtn)    menuBtn.addEventListener('click',    function ()  { openSidebar(); });
+  if (overlay)    overlay.addEventListener('click',   function ()  { closeSidebar(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSidebar(); });
+
+  /* Honour URL hash on load */
+  var PANELS = ['overview','colors','typography','components',
+                'iconography','logo','voice','motion','downloads','living'];
+  var hash = window.location.hash.replace('#', '');
+  if (hash && PANELS.indexOf(hash) !== -1) { showPanel(hash); }
+
+}());
 </script>
 </body>
 </html>
