@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Claravine Brand Standards — Brand design system for color, typography, iconography, logo usage, and voice guidelines.">
-  <title>Claravine Brand Standards — v1.0</title>
+  <title>Claravine Brand Standards — v1.4</title>
 
   <!-- Google Fonts: Poppins + Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -267,53 +267,134 @@
     .section--dark .sub-desc { color: rgba(255,255,255,0.60); }
 
     /* ====================================================
-       HERO
+       HERO — Gradient Animation Standard v1.4
+       Implements: Claravine Hero Gradient Technical &
+       Animation Standard (see CLARAVINE_MASTER_PROJECT_INSTRUCTIONS.md §3)
+       §2  Base gradient: white → #E5FFF5 → #5DD39E
+       §3  SMIL + CSS ping-pong gradientTransform animation
+       §4  18s drift / 24s breathe / ease-in-out
+       §5  Hover 1.25× speed / reduced-motion full disable
+       §6  viewBox 1440×900 / xMidYMid slice / 6 breakpoints
+       §7  All magic numbers as CSS custom properties below
     ==================================================== */
+
+    /* §7: Animation custom properties */
+    :root {
+      --cv-stop-start:         #FFFFFF;
+      --cv-stop-mid-0:         #E5FFF5;
+      --cv-stop-mid-1:         #F2FFF9;
+      --cv-stop-mid-2:         #D8FFEE;
+      --cv-stop-end:           #5DD39E;
+      --cv-grad-dur:           18s;
+      --cv-breathe-dur:        24s;
+      --cv-hero-ease:          cubic-bezier(0.42, 0, 0.58, 1);
+      --cv-drift-fwd:          0.15;
+      --cv-drift-back:        -0.10;
+      --cv-hue-max:            8deg;
+      --cv-hover-speed-factor: 0.8;
+    }
+
+    /* §3.3: hue-rotate fallback on ::before (z-index 0) */
     .hero {
-      background: var(--cv-dark);
-      padding: 100px var(--sp-6) var(--sp-9);
       position: relative;
+      min-height: 90vh;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      background-color: var(--cv-stop-start);
     }
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        radial-gradient(ellipse 70% 90% at 90% 40%, rgba(93,211,158,0.07) 0%, transparent 65%),
-        radial-gradient(ellipse 50% 60% at 10% 90%, rgba(147,220,255,0.05) 0%, transparent 60%);
+      background: linear-gradient(90deg, var(--cv-stop-start) 0%, var(--cv-stop-end) 100%);
+      animation: cv-hue-fallback var(--cv-grad-dur) linear infinite alternate;
+      z-index: 0;
+      will-change: filter;
       pointer-events: none;
     }
-    .hero__inner { max-width: var(--max-w); margin: 0 auto; position: relative; }
+    @keyframes cv-hue-fallback {
+      0%   { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(var(--cv-hue-max)); }
+    }
+
+    /* §2 + §3: SVG gradient layer (z-index 1, above fallback) */
+    .hero__gradient-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* §3.2: CSS stop-color breathing on mid-stop */
+    .hero__gradient-svg .cv-stop-mid {
+      animation: cv-breathe var(--cv-breathe-dur) var(--cv-hero-ease) infinite alternate;
+    }
+    @keyframes cv-breathe {
+      0%   { stop-color: var(--cv-stop-mid-0); }
+      50%  { stop-color: var(--cv-stop-mid-1); }
+      100% { stop-color: var(--cv-stop-mid-2); }
+    }
+
+    /* §3.1: CSS gradientTransform — progressive enhancement */
+    .hero__gradient-svg #claravine-hero-gradient {
+      animation: cv-grad-motion var(--cv-grad-dur) var(--cv-hero-ease) infinite alternate;
+    }
+    @keyframes cv-grad-motion {
+      0%   { gradientTransform: translate(0, 0); }
+      50%  { gradientTransform: translate(var(--cv-drift-fwd), 0); }
+      100% { gradientTransform: translate(var(--cv-drift-back), 0); }
+    }
+
+    /* §5: Hover — 1.25× speed (CSS layer) */
+    .hero:hover .hero__gradient-svg #claravine-hero-gradient,
+    .hero:hover .hero__gradient-svg .cv-stop-mid {
+      animation-duration:
+        calc(var(--cv-grad-dur) * var(--cv-hover-speed-factor)),
+        calc(var(--cv-breathe-dur) * var(--cv-hover-speed-factor));
+    }
+
+    /* Content layer — z-index 2 */
+    .hero__inner {
+      position: relative;
+      z-index: 2;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      width: 100%;
+      padding: var(--sp-9) var(--sp-6);
+    }
     .hero__eyebrow {
       font-family: var(--font-primary);
       font-size: var(--text-xs);
       font-weight: 600;
-      color: var(--cv-green);
+      color: rgba(38,63,72,0.55);
       letter-spacing: 0.12em;
       text-transform: uppercase;
       margin-bottom: var(--sp-4);
     }
+    /* §6: Dark ink text — readable at all gradient phases */
     .hero__title {
       font-family: var(--font-primary);
       font-size: clamp(2.8rem, 6vw, 5rem);
       font-weight: 700;
-      color: var(--cv-white);
+      color: var(--cv-dark);
       line-height: 1.05;
       max-width: 680px;
       margin-bottom: var(--sp-5);
     }
-    .hero__title em { color: var(--cv-green); font-style: normal; }
+    .hero__title em { color: #007A47; font-style: normal; }
     .hero__tagline {
       font-family: var(--font-primary);
       font-size: var(--text-xl);
       font-weight: 600;
-      color: var(--cv-green);
+      color: #007A47;
       margin-bottom: var(--sp-3);
     }
     .hero__desc {
       font-size: var(--text-lg);
-      color: rgba(255,255,255,0.60);
+      color: rgba(38,63,72,0.62);
       max-width: 520px;
       margin-bottom: var(--sp-7);
       line-height: 1.7;
@@ -336,9 +417,14 @@
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
-    .tag--green { background: rgba(93,211,158,0.14); color: var(--cv-green); border: 1px solid rgba(93,211,158,0.3); }
-    .tag--muted { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
+    .tag--green { background: rgba(0,122,71,0.1);  color: #007A47; border: 1px solid rgba(0,122,71,0.25); }
+    .tag--muted { background: rgba(38,63,72,0.07); color: rgba(38,63,72,0.5); border: 1px solid rgba(38,63,72,0.15); }
     .tag--dark  { background: rgba(38,63,72,0.07); color: var(--cv-dark); border: 1px solid rgba(38,63,72,0.15); }
+
+    /* §5: Reduced motion — full animation disable */
+    @media (prefers-reduced-motion: reduce) {
+      .hero, .hero *, .hero #claravine-hero-gradient { animation: none !important; }
+    }
 
     /* ====================================================
        OVERVIEW
@@ -1538,6 +1624,7 @@
     /* 1600px — ultra-wide cap */
     @media (min-width: 1600px) {
       :root { --sec-pad: 100px; }
+      .hero { min-height: 80vh; }
       .hero__title { font-size: clamp(3.5rem, 5vw, 5.5rem); }
     }
 
@@ -1583,7 +1670,7 @@
       .ls-steps { grid-template-columns: 1fr; }
       :root { --sec-pad: 48px; }
       .section { padding: var(--sec-pad) var(--sp-3); }
-      .hero { padding: 72px var(--sp-3) 56px; }
+      .hero { min-height: 70vh; padding: 72px var(--sp-3) 56px; }
       .hero__title { font-size: clamp(2rem, 9vw, 2.8rem); }
       .primary-swatches { grid-template-columns: 1fr 1fr; }
       .dl-grid { grid-template-columns: 1fr; }
@@ -1635,23 +1722,71 @@
         <li><a href="#downloads">Downloads</a></li>
         <li><a href="#living-system">Living System</a></li>
       </ul>
-      <span class="nav__version">v1.3 · Mar 2026</span>
+      <span class="nav__version">v1.4 · Mar 2026</span>
     </div>
   </nav>
 
   <main>
 
     <!-- ══════════════════════════════════════════
-         HERO
+         HERO — Animated Gradient (v1.4)
+         Animation Standard: §2 gradient, §3 SMIL +
+         CSS ping-pong, §3.2 breathing, §3.3 fallback
     ══════════════════════════════════════════ -->
-    <section class="hero" aria-label="Brand guide hero">
+    <section class="hero" id="cv-hero" aria-label="Brand guide hero">
+
+      <!-- §2 + §3: Inline SVG gradient with SMIL animation -->
+      <svg class="hero__gradient-svg"
+           viewBox="0 0 1440 900"
+           preserveAspectRatio="xMidYMid slice"
+           xmlns="http://www.w3.org/2000/svg"
+           aria-hidden="true">
+        <defs>
+          <linearGradient
+            id="claravine-hero-gradient"
+            x1="0%" y1="0%"
+            x2="100%" y2="0%">
+
+            <stop offset="0%"  stop-color="#FFFFFF"/>
+
+            <!-- §3.2: mid-stop with SMIL colour breathing fallback -->
+            <stop class="cv-stop-mid" offset="50%" stop-color="#E5FFF5">
+              <animate
+                attributeName="stop-color"
+                values="#E5FFF5; #F2FFF9; #D8FFEE; #F2FFF9; #E5FFF5"
+                dur="24s"
+                calcMode="spline"
+                keyTimes="0; 0.25; 0.5; 0.75; 1"
+                keySplines="0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1"
+                repeatCount="indefinite"/>
+            </stop>
+
+            <stop offset="100%" stop-color="#5DD39E"/>
+
+            <!-- §3.1: SMIL ping-pong (forward + backward = 36s, no hard reset) -->
+            <animateTransform
+              attributeName="gradientTransform"
+              attributeType="XML"
+              type="translate"
+              values="0 0; 0.15 0; -0.10 0; 0.15 0; 0 0"
+              keyTimes="0; 0.25; 0.5; 0.75; 1"
+              calcMode="spline"
+              keySplines="0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1"
+              dur="36s"
+              repeatCount="indefinite"
+              additive="replace"/>
+          </linearGradient>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#claravine-hero-gradient)"/>
+      </svg>
+
       <div class="hero__inner">
         <p class="hero__eyebrow">Brand Standards</p>
         <h1 class="hero__title">Claravine<br><em>Brand Standards</em></h1>
         <p class="hero__tagline">The Data Standards Company™</p>
         <p class="hero__desc">Brand guidelines for color, typography, iconography, logo usage, and voice. Maintained on GitHub and versioned for continuous iteration.</p>
         <div class="hero__tags">
-          <span class="tag tag--green">v1.0 · Updated March 2026</span>
+          <span class="tag tag--green">v1.4 · March 2026</span>
           <span class="tag tag--muted">No Data Drama®</span>
         </div>
       </div>
@@ -2869,7 +3004,7 @@
                 <p class="ls-version__notes">Button specs from live site audit. Inconsistency flags. Body text token <code style="font-size:11px;background:#f0f4f5;padding:1px 4px;border-radius:3px;">#30505A</code> standardized.</p>
               </div>
               <div class="ls-version ls-version--current">
-                <p class="ls-version__tag">v1.3 · Mar 2026</p>
+                <p class="ls-version__tag">v1.4 · Mar 2026</p>
                 <p class="ls-version__label">Living System — Current</p>
                 <p class="ls-version__notes">Architecture defined. Migration path documented. Project instructions generated for ongoing AI-assisted maintenance.</p>
               </div>
@@ -2931,7 +3066,7 @@
         © 2026 Claravine. The Data Standards Company™. No Data Drama®. All rights reserved.<br>
         770 E. Main Street #360, Lehi, Utah 84043 · <a href="mailto:info@claravine.com" style="color:var(--cv-green);">info@claravine.com</a>
       </p>
-      <span class="footer__version">Brand Standards v1.3 · Last updated March 2026</span>
+      <span class="footer__version">Brand Standards v1.4 · Last updated March 2026</span>
     </div>
   </footer>
 
@@ -2988,6 +3123,24 @@
       }
     });
   })();
+</script>
+
+<!-- Hero gradient: §5 SMIL hover speed-up (1.25×) -->
+<script>
+(function() {
+  var hero = document.getElementById('cv-hero');
+  if (!hero) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var anims = hero.querySelectorAll('animateTransform, animate');
+  var factor = 0.8; // 0.8 × base dur ≈ 1.25× faster
+  anims.forEach(function(a) { a._baseDur = parseFloat(a.getAttribute('dur')) || 36; });
+  hero.addEventListener('mouseenter', function() {
+    anims.forEach(function(a) { a.setAttribute('dur', (a._baseDur * factor).toFixed(1) + 's'); });
+  });
+  hero.addEventListener('mouseleave', function() {
+    anims.forEach(function(a) { a.setAttribute('dur', a._baseDur + 's'); });
+  });
+})();
 </script>
 </body>
 </html>
