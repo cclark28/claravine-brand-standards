@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-  <!-- Material Symbols Rounded (Iconography) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0">
+  <!-- Material Symbols Rounded — FILL=0 (outlined, no fills) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0,0">
 
   <style>
     /* ====================================================
@@ -135,6 +135,15 @@
     }
     img, svg { display: block; max-width: 100%; }
     a { color: inherit; }
+
+    /* Material Symbols — global FILL=0 (outlined, no fills) */
+    .material-symbols-rounded {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-size: 20px;
+      line-height: 1;
+      vertical-align: middle;
+      user-select: none;
+    }
 
     /* ====================================================
        APP SHELL + SIDEBAR
@@ -322,6 +331,53 @@
     .mobile-menu-btn .material-symbols-rounded { font-size: 20px; }
     .mobile-menu-btn:hover { background: rgba(255,255,255,0.14); color: white; }
 
+    /* ── Desktop top nav bar (mirrors sidebar, all viewports ≥ 769 px) ── */
+    .desktop-topbar {
+      display: flex;
+      height: 44px;
+      background: #FFFFFF;
+      border-bottom: 1px solid #DDE5E8;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 0 var(--sp-4);
+      gap: 2px;
+      align-items: stretch;
+    }
+    .desktop-topbar::-webkit-scrollbar { display: none; }
+    .topbar__item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 11px;
+      font-family: var(--font-primary);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: rgba(38,63,72,0.55);
+      border: none;
+      background: none;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.14s ease, border-color 0.14s ease;
+    }
+    .topbar__item .material-symbols-rounded {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+    .topbar__item:hover { color: var(--cv-dark); }
+    .topbar__item:hover .material-symbols-rounded { opacity: 1; }
+    .topbar__item.is-active {
+      color: var(--cv-dark);
+      font-weight: 600;
+      border-bottom-color: var(--cv-green);
+    }
+    .topbar__item.is-active .material-symbols-rounded { opacity: 1; }
+
     /* ── Sidebar overlay (mobile) ── */
     .sidebar-overlay {
       display: none;
@@ -423,47 +479,25 @@
        §7  All magic numbers as CSS custom properties below
     ==================================================== */
 
-    /* §7: Animation custom properties */
+    /* Hero gradient stop colors (also used as fallback bg stops) */
     :root {
-      --cv-stop-start:         #FFFFFF;
-      --cv-stop-mid-0:         #E5FFF5;
-      --cv-stop-mid-1:         #F2FFF9;
-      --cv-stop-mid-2:         #D8FFEE;
-      --cv-stop-end:           #5DD39E;
-      --cv-grad-dur:           18s;
-      --cv-breathe-dur:        24s;
-      --cv-hero-ease:          cubic-bezier(0.42, 0, 0.58, 1);
-      --cv-drift-fwd:          0.15;
-      --cv-drift-back:        -0.10;
-      --cv-hue-max:            8deg;
-      --cv-hover-speed-factor: 0.8;
+      --cv-stop-start: #FFFFFF;
+      --cv-stop-mid:   #E5FFF5;
+      --cv-stop-end:   #5DD39E;
     }
 
-    /* §3.3: hue-rotate fallback on ::before (z-index 0) */
+    /* Hero layout */
     .hero {
       position: relative;
       min-height: 90vh;
       overflow: hidden;
       display: flex;
       align-items: center;
-      background-color: var(--cv-stop-start);
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, var(--cv-stop-start) 0%, var(--cv-stop-end) 100%);
-      animation: cv-hue-fallback var(--cv-grad-dur) linear infinite alternate;
-      z-index: 0;
-      will-change: filter;
-      pointer-events: none;
-    }
-    @keyframes cv-hue-fallback {
-      0%   { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(var(--cv-hue-max)); }
+      /* Static fallback for browsers without SVG/SMIL support */
+      background: linear-gradient(135deg, #FFFFFF 0%, #E5FFF5 50%, #5DD39E 100%);
     }
 
-    /* §2 + §3: SVG gradient layer (z-index 1, above fallback) */
+    /* SVG gradient layer — sits above fallback */
     .hero__gradient-svg {
       position: absolute;
       inset: 0;
@@ -473,35 +507,7 @@
       pointer-events: none;
     }
 
-    /* §3.2: CSS stop-color breathing on mid-stop */
-    .hero__gradient-svg .cv-stop-mid {
-      animation: cv-breathe var(--cv-breathe-dur) var(--cv-hero-ease) infinite alternate;
-    }
-    @keyframes cv-breathe {
-      0%   { stop-color: var(--cv-stop-mid-0); }
-      50%  { stop-color: var(--cv-stop-mid-1); }
-      100% { stop-color: var(--cv-stop-mid-2); }
-    }
-
-    /* §3.1: CSS gradientTransform — progressive enhancement */
-    .hero__gradient-svg #claravine-hero-gradient {
-      animation: cv-grad-motion var(--cv-grad-dur) var(--cv-hero-ease) infinite alternate;
-    }
-    @keyframes cv-grad-motion {
-      0%   { gradientTransform: translate(0, 0); }
-      50%  { gradientTransform: translate(var(--cv-drift-fwd), 0); }
-      100% { gradientTransform: translate(var(--cv-drift-back), 0); }
-    }
-
-    /* §5: Hover — 1.25× speed (CSS layer) */
-    .hero:hover .hero__gradient-svg #claravine-hero-gradient,
-    .hero:hover .hero__gradient-svg .cv-stop-mid {
-      animation-duration:
-        calc(var(--cv-grad-dur) * var(--cv-hover-speed-factor)),
-        calc(var(--cv-breathe-dur) * var(--cv-hover-speed-factor));
-    }
-
-    /* Content layer — z-index 2 */
+    /* Content layer */
     .hero__inner {
       position: relative;
       z-index: 2;
@@ -523,7 +529,7 @@
     .hero__title {
       font-family: var(--font-primary);
       font-size: clamp(2.8rem, 6vw, 5rem);
-      font-weight: 700;
+      font-weight: 600;
       color: var(--cv-dark);
       line-height: 1.05;
       max-width: 680px;
@@ -566,9 +572,9 @@
     .tag--muted { background: rgba(38,63,72,0.07); color: rgba(38,63,72,0.5); border: 1px solid rgba(38,63,72,0.15); }
     .tag--dark  { background: rgba(38,63,72,0.07); color: var(--cv-dark); border: 1px solid rgba(38,63,72,0.15); }
 
-    /* §5: Reduced motion — full animation disable */
+    /* Reduced motion — hide animated SVG layer, show static fallback */
     @media (prefers-reduced-motion: reduce) {
-      .hero, .hero *, .hero #claravine-hero-gradient { animation: none !important; }
+      .hero__gradient-svg { display: none; }
     }
 
     /* ====================================================
@@ -1180,21 +1186,22 @@
     .dl-badge--svg   { background: rgba(93,211,158,0.12); color: #1A6B42; border: 1px solid rgba(93,211,158,0.25); }
     .dl-badge--png   { background: rgba(0,74,173,0.08);  color: var(--cv-blue); border: 1px solid rgba(0,74,173,0.18); }
     .dl-badge--color { background: rgba(38,63,72,0.07);  color: var(--cv-dark); border: 1px solid rgba(38,63,72,0.15); }
-    .dl-links { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-top: var(--sp-1); }
+    .dl-links { display: flex; gap: 6px; flex-wrap: wrap; margin-top: var(--sp-1); row-gap: 6px; }
     .dl-link {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 6px 14px;
+      gap: 4px;
+      padding: 5px 11px;
       border-radius: 100px;
       font-family: var(--font-primary);
-      font-size: var(--text-xs);
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
       text-decoration: none;
       transition: all 0.18s;
       cursor: pointer;
       border: none;
+      white-space: nowrap;
     }
     .dl-link--primary {
       background: var(--cv-green);
@@ -1364,30 +1371,108 @@
       margin-bottom: var(--sp-4);
     }
 
+    /* ── Footer ── */
     .footer {
-      background: #1C3039;
-      padding: var(--sp-7) var(--sp-6);
-      border-top: 1px solid rgba(255,255,255,0.05);
+      background: #19303A;
+      border-top: 1px solid rgba(255,255,255,0.06);
     }
-    .footer__inner {
+    .footer__top {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: var(--sp-8) var(--sp-6) var(--sp-7);
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: var(--sp-7);
+    }
+    .footer__brand-col {}
+    .footer__logo { display: inline-block; margin-bottom: var(--sp-4); }
+    .footer__logo svg { height: 22px; }
+    .footer__tagline {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+      max-width: 280px;
+      margin-bottom: var(--sp-4);
+    }
+    .footer__contact {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.35);
+      line-height: 1.7;
+    }
+    .footer__contact a { color: var(--cv-green); text-decoration: none; }
+    .footer__contact a:hover { text-decoration: underline; }
+    .footer__col-title {
+      font-family: var(--font-primary);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: var(--sp-3);
+    }
+    .footer__links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-2);
+      list-style: none;
+    }
+    .footer__links a {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer__links a:hover { color: white; }
+    .footer__bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: var(--sp-4) var(--sp-6);
+    }
+    .footer__bottom-inner {
       max-width: var(--max-w);
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--sp-5);
+      gap: var(--sp-4);
       flex-wrap: wrap;
     }
-    .footer__logo svg { height: 22px; }
-    .footer__meta {
-      font-size: var(--text-sm);
-      color: rgba(255,255,255,0.35);
+    .footer__copy {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
     }
-    .footer__version {
+    .footer__legal {
+      display: flex;
+      gap: var(--sp-4);
+      list-style: none;
+    }
+    .footer__legal a {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      text-decoration: none;
+    }
+    .footer__legal a:hover { color: rgba(255,255,255,0.6); }
+    .footer__version-tag {
       font-family: var(--font-primary);
-      font-size: var(--text-xs);
+      font-size: 11px;
       font-weight: 600;
       color: var(--cv-green);
+      background: rgba(93,211,158,0.1);
+      border: 1px solid rgba(93,211,158,0.2);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+    @media (max-width: 1024px) {
+      .footer__top { grid-template-columns: 1fr 1fr 1fr; }
+      .footer__brand-col { grid-column: 1 / -1; }
+    }
+    @media (max-width: 768px) {
+      .footer__top { grid-template-columns: 1fr 1fr; padding: var(--sp-6) var(--sp-4) var(--sp-5); gap: var(--sp-5); }
+      .footer__brand-col { grid-column: 1 / -1; }
+      .footer__bottom { padding: var(--sp-3) var(--sp-4); }
+      .footer__legal { gap: var(--sp-3); flex-wrap: wrap; }
+    }
+    @media (max-width: 480px) {
+      .footer__top { grid-template-columns: 1fr; }
     }
 
     /* ====================================================
@@ -1780,7 +1865,8 @@
 
     /* ── 1024px standard desktop ── */
     @media (max-width: 1024px) {
-      :root { --sidebar-w: 220px; }
+      :root { --sidebar-w: 220px; --sec-pad: 64px; }
+      .section { padding: var(--sec-pad) var(--sp-5); }
       .cv-grid { grid-template-columns: 1fr 2fr; }
       .cv-grid > *:nth-child(3) { grid-column: 1 / -1; }
       .primary-swatches { grid-template-columns: repeat(2, 1fr); }
@@ -1802,6 +1888,7 @@
       .content { height: auto; min-height: 100dvh; overflow-y: visible; }
       .cv-panel { flex: none; }
       .mobile-topbar { display: flex; }
+      .desktop-topbar { display: none; }
       .ls-grid { grid-template-columns: 1fr; }
       .ls-bottom { grid-template-columns: 1fr; }
       .ls-steps { grid-template-columns: repeat(2, 1fr); }
@@ -1938,6 +2025,40 @@
       <span class="mobile-topbar__version">v1.4</span>
     </header>
 
+    <!-- Desktop top navigation bar (mirrors sidebar) -->
+    <nav class="desktop-topbar" id="desktop-topbar" aria-label="Section navigation">
+      <button class="topbar__item" data-panel="overview">
+        <span class="material-symbols-rounded">grid_view</span>Overview
+      </button>
+      <button class="topbar__item" data-panel="colors">
+        <span class="material-symbols-rounded">palette</span>Colors
+      </button>
+      <button class="topbar__item" data-panel="typography">
+        <span class="material-symbols-rounded">text_fields</span>Typography
+      </button>
+      <button class="topbar__item" data-panel="components">
+        <span class="material-symbols-rounded">widgets</span>Components
+      </button>
+      <button class="topbar__item" data-panel="iconography">
+        <span class="material-symbols-rounded">category</span>Iconography
+      </button>
+      <button class="topbar__item" data-panel="logo">
+        <span class="material-symbols-rounded">star</span>Logo
+      </button>
+      <button class="topbar__item" data-panel="voice">
+        <span class="material-symbols-rounded">record_voice_over</span>Voice &amp; Tone
+      </button>
+      <button class="topbar__item" data-panel="motion">
+        <span class="material-symbols-rounded">animation</span>Motion
+      </button>
+      <button class="topbar__item" data-panel="downloads">
+        <span class="material-symbols-rounded">download</span>Downloads
+      </button>
+      <button class="topbar__item" data-panel="living">
+        <span class="material-symbols-rounded">autorenew</span>Living System
+      </button>
+    </nav>
+
     <!-- ══════════════════════════════════════════
          HERO — Animated Gradient (v1.4)
          Animation Standard: §2 gradient, §3 SMIL +
@@ -1975,16 +2096,16 @@
 
             <stop offset="100%" stop-color="#5DD39E"/>
 
-            <!-- §3.1: SMIL ping-pong (forward + backward = 36s, no hard reset) -->
+            <!-- Smooth ping-pong drift: ease in-out, no direction-reversal jerk -->
             <animateTransform
               attributeName="gradientTransform"
               attributeType="XML"
               type="translate"
-              values="0 0; 0.15 0; -0.10 0; 0.15 0; 0 0"
-              keyTimes="0; 0.25; 0.5; 0.75; 1"
+              values="0 0; 0.18 0; 0 0"
+              keyTimes="0; 0.5; 1"
               calcMode="spline"
-              keySplines="0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.42 0 0.58 1"
-              dur="36s"
+              keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
+              dur="20s"
               repeatCount="indefinite"
               additive="replace"/>
           </linearGradient>
@@ -2343,7 +2464,7 @@
               </div>
               <div class="type-scale-row">
                 <div class="type-scale-row__meta"><p class="type-scale-row__px">42px</p><p class="type-scale-row__name">H1</p></div>
-                <p class="type-scale-row__sample" style="font-size:1.9rem;font-family:var(--font-primary);font-weight:700;color:var(--cv-dark);">Heading 1</p>
+                <p class="type-scale-row__sample" style="font-size:1.9rem;font-family:var(--font-primary);font-weight:600;color:var(--cv-dark);">Heading 1</p>
               </div>
               <div class="type-scale-row">
                 <div class="type-scale-row__meta"><p class="type-scale-row__px">32px</p><p class="type-scale-row__name">H2</p></div>
@@ -2594,9 +2715,10 @@
             </div>
             <div class="callout">
               <strong>Library:</strong> Google Material Symbols · Rounded style<br>
-              <strong>Fill:</strong> Filled (FILL=1) for UI contexts, outlined for editorial<br>
-              <strong>Weight:</strong> 400 (default)<br>
-              <strong>Source:</strong> <a href="https://fonts.google.com/icons?icon.style=Rounded" target="_blank" rel="noopener" style="color:var(--cv-green);">fonts.google.com/icons</a>
+              <strong>Fill:</strong> Outlined only (FILL=0) — no filled icons<br>
+              <strong>Weight:</strong> 400 · Size: 24px default<br>
+              <strong>Usage:</strong> Pair icons with visible text labels wherever space allows<br>
+              <strong>Full library:</strong> <a href="https://fonts.google.com/icons?icon.style=Rounded" target="_blank" rel="noopener" style="color:var(--cv-green);font-weight:600;">fonts.google.com/icons?icon.style=Rounded ↗</a>
             </div>
             <br>
             <div class="do-dont">
@@ -2681,32 +2803,48 @@
             </div>
 
             <!-- Icon grid -->
-            <p class="sub-title" style="color:var(--cv-dark);margin-top:var(--sp-5);">Brand-Aligned Icon Set</p>
+            <p class="sub-title" style="color:var(--cv-dark);margin-top:var(--sp-5);">Commonly Used Icons</p>
             <div class="icon-grid">
-              <div class="icon-cell"><span class="material-symbols-rounded">analytics</span><span class="icon-cell__name">Analytics</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">dataset</span><span class="icon-cell__name">Dataset</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">hub</span><span class="icon-cell__name">Hub</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">check_circle</span><span class="icon-cell__name">Check</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">cancel</span><span class="icon-cell__name">Cancel</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">add_circle</span><span class="icon-cell__name">Add</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">search</span><span class="icon-cell__name">Search</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">settings</span><span class="icon-cell__name">Settings</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">person</span><span class="icon-cell__name">Person</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">mail</span><span class="icon-cell__name">Mail</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">info</span><span class="icon-cell__name">Info</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">arrow_forward</span><span class="icon-cell__name">Arrow</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">bar_chart</span><span class="icon-cell__name">Chart</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">language</span><span class="icon-cell__name">Web</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">location_on</span><span class="icon-cell__name">Location</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">lock</span><span class="icon-cell__name">Lock</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">cloud</span><span class="icon-cell__name">Cloud</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">sync</span><span class="icon-cell__name">Sync</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">download</span><span class="icon-cell__name">Download</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">open_in_new</span><span class="icon-cell__name">External</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">table_chart</span><span class="icon-cell__name">Table</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">verified</span><span class="icon-cell__name">Verified</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">manage_accounts</span><span class="icon-cell__name">Manage</span></div>
-              <div class="icon-cell"><span class="material-symbols-rounded">integration_instructions</span><span class="icon-cell__name">Integrate</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">analytics</span><span class="icon-cell__name">analytics</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">dataset</span><span class="icon-cell__name">dataset</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">hub</span><span class="icon-cell__name">hub</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">check_circle</span><span class="icon-cell__name">check_circle</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">cancel</span><span class="icon-cell__name">cancel</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">add_circle</span><span class="icon-cell__name">add_circle</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">search</span><span class="icon-cell__name">search</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">settings</span><span class="icon-cell__name">settings</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">person</span><span class="icon-cell__name">person</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">mail</span><span class="icon-cell__name">mail</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">info</span><span class="icon-cell__name">info</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">arrow_forward</span><span class="icon-cell__name">arrow_forward</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">bar_chart</span><span class="icon-cell__name">bar_chart</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">language</span><span class="icon-cell__name">language</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">lock</span><span class="icon-cell__name">lock</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">cloud</span><span class="icon-cell__name">cloud</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">sync</span><span class="icon-cell__name">sync</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">download</span><span class="icon-cell__name">download</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">open_in_new</span><span class="icon-cell__name">open_in_new</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">table_chart</span><span class="icon-cell__name">table_chart</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">verified</span><span class="icon-cell__name">verified</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">manage_accounts</span><span class="icon-cell__name">manage_accounts</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">integration_instructions</span><span class="icon-cell__name">integration_instructions</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">edit</span><span class="icon-cell__name">edit</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">delete</span><span class="icon-cell__name">delete</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">filter_list</span><span class="icon-cell__name">filter_list</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">sort</span><span class="icon-cell__name">sort</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">notifications</span><span class="icon-cell__name">notifications</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">chevron_right</span><span class="icon-cell__name">chevron_right</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">expand_more</span><span class="icon-cell__name">expand_more</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">close</span><span class="icon-cell__name">close</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">upload</span><span class="icon-cell__name">upload</span></div>
+              <div class="icon-cell"><span class="material-symbols-rounded">share</span><span class="icon-cell__name">share</span></div>
+            </div>
+            <div style="margin-top:var(--sp-4);text-align:center;">
+              <a href="https://fonts.google.com/icons?icon.style=Rounded" target="_blank" rel="noopener"
+                 style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:var(--cv-dark);color:white;border-radius:100px;font-family:var(--font-primary);font-size:var(--text-sm);font-weight:600;text-decoration:none;letter-spacing:0.02em;">
+                <span class="material-symbols-rounded" style="font-size:16px;color:var(--cv-green);">open_in_new</span>
+                Browse Full Icon Library
+              </a>
             </div>
           </div>
         </div>
@@ -3070,7 +3208,7 @@
           <span class="sh__eyebrow">Asset Library · Downloads</span>
           <h2 class="sh__title" id="dl-heading">Asset Downloads</h2>
           <div class="sh__rule"></div>
-          <p class="sh__desc">Brand assets organized by use case. All files are provided in SVG (scalable) format. Download the appropriate variant for your context.</p>
+          <p class="sh__desc">Brand assets organized by use case. All files are provided in SVG (vector) and PNG (transparent background) formats at 48px and 128px. Download the appropriate variant for your context.</p>
         </div>
 
         <div class="dl-grid">
@@ -3080,14 +3218,21 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 193 41" fill="none" style="width:160px;" aria-label="Claravine full color wordmark"><path d="M46.0059 8.93848C50.5063 8.93848 55.918 9.97743 55.918 15.6299V27.8945H55.9043C55.9043 30.0371 56.139 32.1801 56.6982 33.1396H50.4023C50.1942 32.4036 50.0127 31.6407 49.9736 30.8652C47.9965 33.0079 45.1345 33.7832 42.377 33.7832C38.0977 33.7831 34.6904 31.5483 34.6904 26.7109C34.6905 21.3875 38.527 20.0995 42.377 19.5605C46.188 18.969 49.7128 19.2315 49.7129 16.458C49.7129 13.6845 47.8794 13.2637 45.6943 13.2637C43.327 13.2637 41.8051 14.2629 41.584 16.8262H35.3799C35.7311 10.7532 40.9332 8.93857 46.0059 8.93848ZM174.309 8.89941C181.983 8.89941 185.703 15.6432 185.261 22.8994H168.976C169.145 27.0135 171.07 28.8798 174.517 28.8799C174.907 28.8799 175.284 28.8406 175.648 28.7617V33.6914C175.193 33.7308 174.751 33.7568 174.296 33.7568C167.168 33.7568 162.759 28.4465 162.759 21.3613C162.759 14.276 167.441 8.89941 174.296 8.89941H174.309ZM88.2012 8.89941C92.7015 8.89941 98.113 9.93779 98.1133 15.5898V27.8545C98.1133 29.997 98.334 32.1399 98.9062 33.0996H92.6113C92.4032 32.3635 92.2207 31.6007 92.1816 30.8252C90.2046 32.9679 87.3298 33.7441 84.5723 33.7441C80.3061 33.744 76.8985 31.5091 76.8984 26.6719C76.8984 21.3482 80.7353 20.0595 84.5723 19.5205C88.3834 18.929 91.9219 19.1916 91.9219 16.418C91.9217 13.6448 90.0744 13.2246 87.9023 13.2246C85.5352 13.2246 84.0132 14.2231 83.792 16.7861H77.5879C77.9263 10.7135 83.1286 8.89952 88.2012 8.89941ZM11.498 8.71582C12.4996 8.71582 13.4756 8.83362 14.4121 9.04395C14.6721 9.09651 14.9063 9.16184 15.1533 9.22754C15.2443 9.2538 15.3222 9.26771 15.4131 9.29395C15.4651 9.30709 15.531 9.32039 15.583 9.34668C19.1076 10.4904 21.826 13.2242 22.1123 17.6406H16.0508C15.6605 14.9988 14.0477 13.7374 11.4727 13.7373C7.50553 13.7373 6.19144 17.7723 6.19141 21.2295C6.19141 25.4096 7.93432 28.3281 11.3291 28.3281C13.5923 28.3281 14.8806 27.3157 15.583 26.0537V26.0938H21.7744C20.3696 30.9048 16.5706 33.5205 11.3809 33.5205C4.57835 33.5203 1.25194e-05 28.788 0 21.4531C0 14.1182 4.1882 8.71595 11.498 8.71582ZM151.338 8.91211C157.932 8.91211 159.598 12.7902 159.598 18.6396V33.1396H153.394V19.8096C153.393 15.932 152.301 14.0264 149.413 14.0264C146.044 14.0264 144.601 15.9847 144.601 20.7695V33.165H138.396V9.54395H144.288V12.8301H144.418C145.992 10.1747 148.711 8.89941 151.325 8.89941L151.338 8.91211ZM31.6982 33.1523H24.9736V0.81543H31.6982V33.1523ZM74.0371 9.79297C74.4793 9.79302 74.9995 9.89885 75.3896 10.0303V16.3262C74.8303 16.1816 73.9064 16.0898 73.165 16.0898C68.6259 16.09 67.0519 19.5075 67.0518 23.6611V33.1523H60.8477V10.1348H66.7402V14.8018H66.8174L66.8311 14.8145C67.9758 11.8438 71.0196 9.79297 74.0371 9.79297ZM132.23 33.1523H126.026V9.79297H132.23V33.1523ZM111.602 25.6465H111.705L116.466 9.53027H122.618L114.983 33.126H108.076L100.35 9.53027H106.854L111.602 25.6465ZM49.7266 21.5977C48.686 22.5573 46.5003 22.6099 44.5752 22.9648C42.6502 23.3855 40.9072 24.0038 40.9072 26.4355C40.9074 28.8669 42.6893 29.4452 44.7051 29.4453C49.5567 29.4453 49.7266 25.4358 49.7266 24.0293V21.5977ZM91.9082 21.5713C90.8676 22.5307 88.6697 22.5704 86.7578 22.9385C84.8328 23.3591 83.0898 23.9905 83.0898 26.4092C83.09 28.8275 84.8718 29.4189 86.8877 29.4189C91.7394 29.4189 91.9082 25.4095 91.9082 24.0029V21.5713ZM174.14 13.7764C170.211 13.7764 169.067 16.9707 168.989 18.7979H179.069C178.497 15.5116 177.144 13.7764 174.14 13.7764ZM132.205 6.44141H126.026V0H132.205V6.44141Z" fill="#263F48"/><path d="M181.19 28.6304V41.0001H186.483V34.204H193V28.6304H181.19Z" fill="#5DD39E"/></svg>
             </div>
             <p class="dl-card__title">Full Color Wordmark</p>
-            <p class="dl-card__desc">Dark navy text with green step mark. For use on white and light backgrounds.</p>
+            <p class="dl-card__desc">Dark navy text with green anchor mark. For use on white and light backgrounds.</p>
             <div class="dl-badges">
               <span class="dl-badge dl-badge--svg">SVG</span>
+              <span class="dl-badge dl-badge--png">PNG</span>
               <span class="dl-badge dl-badge--color">Light BG</span>
             </div>
             <div class="dl-links">
               <a class="dl-link dl-link--primary" href="assets/logos/claravine-wordmark-color.svg" download>
                 <span class="material-symbols-rounded" style="font-size:14px;">download</span>SVG
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-wordmark-color-48.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 48px
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-wordmark-color-128.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 128px
               </a>
             </div>
           </div>
@@ -3098,14 +3243,21 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 193 41" fill="none" style="width:160px;" aria-label="Claravine white wordmark"><path d="M46.0059 8.93848C50.5063 8.93848 55.918 9.97743 55.918 15.6299V27.8945H55.9043C55.9043 30.0371 56.139 32.1801 56.6982 33.1396H50.4023C50.1942 32.4036 50.0127 31.6407 49.9736 30.8652C47.9965 33.0079 45.1345 33.7832 42.377 33.7832C38.0977 33.7831 34.6904 31.5483 34.6904 26.7109C34.6905 21.3875 38.527 20.0995 42.377 19.5605C46.188 18.969 49.7128 19.2315 49.7129 16.458C49.7129 13.6845 47.8794 13.2637 45.6943 13.2637C43.327 13.2637 41.8051 14.2629 41.584 16.8262H35.3799C35.7311 10.7532 40.9332 8.93857 46.0059 8.93848ZM174.309 8.89941C181.983 8.89941 185.703 15.6432 185.261 22.8994H168.976C169.145 27.0135 171.07 28.8798 174.517 28.8799C174.907 28.8799 175.284 28.8406 175.648 28.7617V33.6914C175.193 33.7308 174.751 33.7568 174.296 33.7568C167.168 33.7568 162.759 28.4465 162.759 21.3613C162.759 14.276 167.441 8.89941 174.296 8.89941H174.309ZM88.2012 8.89941C92.7015 8.89941 98.113 9.93779 98.1133 15.5898V27.8545C98.1133 29.997 98.334 32.1399 98.9062 33.0996H92.6113C92.4032 32.3635 92.2207 31.6007 92.1816 30.8252C90.2046 32.9679 87.3298 33.7441 84.5723 33.7441C80.3061 33.744 76.8985 31.5091 76.8984 26.6719C76.8984 21.3482 80.7353 20.0595 84.5723 19.5205C88.3834 18.929 91.9219 19.1916 91.9219 16.418C91.9217 13.6448 90.0744 13.2246 87.9023 13.2246C85.5352 13.2246 84.0132 14.2231 83.792 16.7861H77.5879C77.9263 10.7135 83.1286 8.89952 88.2012 8.89941ZM11.498 8.71582C12.4996 8.71582 13.4756 8.83362 14.4121 9.04395C14.6721 9.09651 14.9063 9.16184 15.1533 9.22754C15.2443 9.2538 15.3222 9.26771 15.4131 9.29395C15.4651 9.30709 15.531 9.32039 15.583 9.34668C19.1076 10.4904 21.826 13.2242 22.1123 17.6406H16.0508C15.6605 14.9988 14.0477 13.7374 11.4727 13.7373C7.50553 13.7373 6.19144 17.7723 6.19141 21.2295C6.19141 25.4096 7.93432 28.3281 11.3291 28.3281C13.5923 28.3281 14.8806 27.3157 15.583 26.0537V26.0938H21.7744C20.3696 30.9048 16.5706 33.5205 11.3809 33.5205C4.57835 33.5203 1.25194e-05 28.788 0 21.4531C0 14.1182 4.1882 8.71595 11.498 8.71582ZM151.338 8.91211C157.932 8.91211 159.598 12.7902 159.598 18.6396V33.1396H153.394V19.8096C153.393 15.932 152.301 14.0264 149.413 14.0264C146.044 14.0264 144.601 15.9847 144.601 20.7695V33.165H138.396V9.54395H144.288V12.8301H144.418C145.992 10.1747 148.711 8.89941 151.325 8.89941L151.338 8.91211ZM31.6982 33.1523H24.9736V0.81543H31.6982V33.1523ZM74.0371 9.79297C74.4793 9.79302 74.9995 9.89885 75.3896 10.0303V16.3262C74.8303 16.1816 73.9064 16.0898 73.165 16.0898C68.6259 16.09 67.0519 19.5075 67.0518 23.6611V33.1523H60.8477V10.1348H66.7402V14.8018H66.8174L66.8311 14.8145C67.9758 11.8438 71.0196 9.79297 74.0371 9.79297ZM132.23 33.1523H126.026V9.79297H132.23V33.1523ZM111.602 25.6465H111.705L116.466 9.53027H122.618L114.983 33.126H108.076L100.35 9.53027H106.854L111.602 25.6465ZM49.7266 21.5977C48.686 22.5573 46.5003 22.6099 44.5752 22.9648C42.6502 23.3855 40.9072 24.0038 40.9072 26.4355C40.9074 28.8669 42.6893 29.4452 44.7051 29.4453C49.5567 29.4453 49.7266 25.4358 49.7266 24.0293V21.5977ZM91.9082 21.5713C90.8676 22.5307 88.6697 22.5704 86.7578 22.9385C84.8328 23.3591 83.0898 23.9905 83.0898 26.4092C83.09 28.8275 84.8718 29.4189 86.8877 29.4189C91.7394 29.4189 91.9082 25.4095 91.9082 24.0029V21.5713ZM174.14 13.7764C170.211 13.7764 169.067 16.9707 168.989 18.7979H179.069C178.497 15.5116 177.144 13.7764 174.14 13.7764ZM132.205 6.44141H126.026V0H132.205V6.44141Z" fill="#FFFFFF"/><path d="M181.19 28.6304V41.0001H186.483V34.204H193V28.6304H181.19Z" fill="#5DD39E"/></svg>
             </div>
             <p class="dl-card__title">White Wordmark</p>
-            <p class="dl-card__desc">All-white logo with green step mark. For use on dark and navy backgrounds.</p>
+            <p class="dl-card__desc">All-white logo with green anchor mark. For use on dark and navy backgrounds.</p>
             <div class="dl-badges">
               <span class="dl-badge dl-badge--svg">SVG</span>
+              <span class="dl-badge dl-badge--png">PNG</span>
               <span class="dl-badge dl-badge--color">Dark BG</span>
             </div>
             <div class="dl-links">
               <a class="dl-link dl-link--primary" href="assets/logos/claravine-wordmark-white.svg" download>
                 <span class="material-symbols-rounded" style="font-size:14px;">download</span>SVG
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-wordmark-white-48.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 48px
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-wordmark-white-128.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 128px
               </a>
             </div>
           </div>
@@ -3116,76 +3268,101 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 193 41" fill="none" style="width:160px;" aria-label="Claravine dark wordmark"><path d="M46.0059 8.93848C50.5063 8.93848 55.918 9.97743 55.918 15.6299V27.8945H55.9043C55.9043 30.0371 56.139 32.1801 56.6982 33.1396H50.4023C50.1942 32.4036 50.0127 31.6407 49.9736 30.8652C47.9965 33.0079 45.1345 33.7832 42.377 33.7832C38.0977 33.7831 34.6904 31.5483 34.6904 26.7109C34.6905 21.3875 38.527 20.0995 42.377 19.5605C46.188 18.969 49.7128 19.2315 49.7129 16.458C49.7129 13.6845 47.8794 13.2637 45.6943 13.2637C43.327 13.2637 41.8051 14.2629 41.584 16.8262H35.3799C35.7311 10.7532 40.9332 8.93857 46.0059 8.93848ZM174.309 8.89941C181.983 8.89941 185.703 15.6432 185.261 22.8994H168.976C169.145 27.0135 171.07 28.8798 174.517 28.8799C174.907 28.8799 175.284 28.8406 175.648 28.7617V33.6914C175.193 33.7308 174.751 33.7568 174.296 33.7568C167.168 33.7568 162.759 28.4465 162.759 21.3613C162.759 14.276 167.441 8.89941 174.296 8.89941H174.309ZM88.2012 8.89941C92.7015 8.89941 98.113 9.93779 98.1133 15.5898V27.8545C98.1133 29.997 98.334 32.1399 98.9062 33.0996H92.6113C92.4032 32.3635 92.2207 31.6007 92.1816 30.8252C90.2046 32.9679 87.3298 33.7441 84.5723 33.7441C80.3061 33.744 76.8985 31.5091 76.8984 26.6719C76.8984 21.3482 80.7353 20.0595 84.5723 19.5205C88.3834 18.929 91.9219 19.1916 91.9219 16.418C91.9217 13.6448 90.0744 13.2246 87.9023 13.2246C85.5352 13.2246 84.0132 14.2231 83.792 16.7861H77.5879C77.9263 10.7135 83.1286 8.89952 88.2012 8.89941ZM11.498 8.71582C12.4996 8.71582 13.4756 8.83362 14.4121 9.04395C14.6721 9.09651 14.9063 9.16184 15.1533 9.22754C15.2443 9.2538 15.3222 9.26771 15.4131 9.29395C15.4651 9.30709 15.531 9.32039 15.583 9.34668C19.1076 10.4904 21.826 13.2242 22.1123 17.6406H16.0508C15.6605 14.9988 14.0477 13.7374 11.4727 13.7373C7.50553 13.7373 6.19144 17.7723 6.19141 21.2295C6.19141 25.4096 7.93432 28.3281 11.3291 28.3281C13.5923 28.3281 14.8806 27.3157 15.583 26.0537V26.0938H21.7744C20.3696 30.9048 16.5706 33.5205 11.3809 33.5205C4.57835 33.5203 1.25194e-05 28.788 0 21.4531C0 14.1182 4.1882 8.71595 11.498 8.71582ZM151.338 8.91211C157.932 8.91211 159.598 12.7902 159.598 18.6396V33.1396H153.394V19.8096C153.393 15.932 152.301 14.0264 149.413 14.0264C146.044 14.0264 144.601 15.9847 144.601 20.7695V33.165H138.396V9.54395H144.288V12.8301H144.418C145.992 10.1747 148.711 8.89941 151.325 8.89941L151.338 8.91211ZM31.6982 33.1523H24.9736V0.81543H31.6982V33.1523ZM74.0371 9.79297C74.4793 9.79302 74.9995 9.89885 75.3896 10.0303V16.3262C74.8303 16.1816 73.9064 16.0898 73.165 16.0898C68.6259 16.09 67.0519 19.5075 67.0518 23.6611V33.1523H60.8477V10.1348H66.7402V14.8018H66.8174L66.8311 14.8145C67.9758 11.8438 71.0196 9.79297 74.0371 9.79297ZM132.23 33.1523H126.026V9.79297H132.23V33.1523ZM111.602 25.6465H111.705L116.466 9.53027H122.618L114.983 33.126H108.076L100.35 9.53027H106.854L111.602 25.6465ZM49.7266 21.5977C48.686 22.5573 46.5003 22.6099 44.5752 22.9648C42.6502 23.3855 40.9072 24.0038 40.9072 26.4355C40.9074 28.8669 42.6893 29.4452 44.7051 29.4453C49.5567 29.4453 49.7266 25.4358 49.7266 24.0293V21.5977ZM91.9082 21.5713C90.8676 22.5307 88.6697 22.5704 86.7578 22.9385C84.8328 23.3591 83.0898 23.9905 83.0898 26.4092C83.09 28.8275 84.8718 29.4189 86.8877 29.4189C91.7394 29.4189 91.9082 25.4095 91.9082 24.0029V21.5713ZM174.14 13.7764C170.211 13.7764 169.067 16.9707 168.989 18.7979H179.069C178.497 15.5116 177.144 13.7764 174.14 13.7764ZM132.205 6.44141H126.026V0H132.205V6.44141Z" fill="#263F48"/><path d="M181.19 28.6304V41.0001H186.483V34.204H193V28.6304H181.19Z" fill="#263F48"/></svg>
             </div>
             <p class="dl-card__title">Dark Wordmark</p>
-            <p class="dl-card__desc">All-dark navy logo including step mark. For single-color print applications.</p>
+            <p class="dl-card__desc">All-dark navy logo including anchor mark. For single-color print applications.</p>
             <div class="dl-badges">
               <span class="dl-badge dl-badge--svg">SVG</span>
+              <span class="dl-badge dl-badge--png">PNG</span>
               <span class="dl-badge dl-badge--color">Print</span>
             </div>
             <div class="dl-links">
               <a class="dl-link dl-link--primary" href="assets/logos/claravine-wordmark-dark.svg" download>
                 <span class="material-symbols-rounded" style="font-size:14px;">download</span>SVG
               </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-wordmark-dark-48.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 48px
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-wordmark-dark-128.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 128px
+              </a>
             </div>
           </div>
 
-          <!-- Step Mark Color -->
+          <!-- Anchor Mark Green -->
           <div class="dl-card">
             <div style="height:72px;background:#F5F8F9;border:1px solid #DDE5E8;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:var(--sp-2);">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 32" style="height:44px;" aria-label="Claravine green step mark">
-                <rect x="0" y="0" width="14" height="32" rx="3" fill="#5DD39E"/>
-                <rect x="14" y="16" width="10" height="16" rx="2.5" fill="#5DD39E"/>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 199" style="height:44px;" aria-label="Claravine green anchor mark">
+                <path d="M0 0V199H85.165V89.6663H190V0H0Z" fill="#5DD39E"/>
               </svg>
             </div>
-            <p class="dl-card__title">Step Mark — Green</p>
+            <p class="dl-card__title">Anchor Mark — Green</p>
             <p class="dl-card__desc">Standalone brand mark in Claravine Green. For favicons, app icons, and compact spaces.</p>
             <div class="dl-badges">
               <span class="dl-badge dl-badge--svg">SVG</span>
+              <span class="dl-badge dl-badge--png">PNG</span>
             </div>
             <div class="dl-links">
-              <a class="dl-link dl-link--primary" href="assets/logos/claravine-mark-color.svg" download>
+              <a class="dl-link dl-link--primary" href="assets/logos/claravine-anchor-green.svg" download>
                 <span class="material-symbols-rounded" style="font-size:14px;">download</span>SVG
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-anchor-green-48.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 48px
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-anchor-green-128.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 128px
               </a>
             </div>
           </div>
 
-          <!-- Step Mark White -->
+          <!-- Anchor Mark White -->
           <div class="dl-card">
             <div style="height:72px;background:#263F48;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:var(--sp-2);">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 32" style="height:44px;" aria-label="Claravine white step mark">
-                <rect x="0" y="0" width="14" height="32" rx="3" fill="#FFFFFF"/>
-                <rect x="14" y="16" width="10" height="16" rx="2.5" fill="#FFFFFF"/>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 199" style="height:44px;" aria-label="Claravine white anchor mark">
+                <path d="M0 0V199H85.165V89.6663H190V0H0Z" fill="#FFFFFF"/>
               </svg>
             </div>
-            <p class="dl-card__title">Step Mark — White</p>
+            <p class="dl-card__title">Anchor Mark — White</p>
             <p class="dl-card__desc">Standalone brand mark in white. For use on dark, navy, or green backgrounds.</p>
             <div class="dl-badges">
               <span class="dl-badge dl-badge--svg">SVG</span>
+              <span class="dl-badge dl-badge--png">PNG</span>
               <span class="dl-badge dl-badge--color">Dark BG</span>
             </div>
             <div class="dl-links">
-              <a class="dl-link dl-link--primary" href="assets/logos/claravine-mark-white.svg" download>
+              <a class="dl-link dl-link--primary" href="assets/logos/claravine-anchor-white.svg" download>
                 <span class="material-symbols-rounded" style="font-size:14px;">download</span>SVG
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-anchor-white-48.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 48px
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-anchor-white-128.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 128px
               </a>
             </div>
           </div>
 
-          <!-- Step Mark Dark -->
+          <!-- Anchor Mark Dark -->
           <div class="dl-card">
             <div style="height:72px;background:#F5F8F9;border:1px solid #DDE5E8;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:var(--sp-2);">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 32" style="height:44px;" aria-label="Claravine dark step mark">
-                <rect x="0" y="0" width="14" height="32" rx="3" fill="#263F48"/>
-                <rect x="14" y="16" width="10" height="16" rx="2.5" fill="#263F48"/>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 199" style="height:44px;" aria-label="Claravine dark anchor mark">
+                <path d="M0 0V199H85.165V89.6663H190V0H0Z" fill="#263F48"/>
               </svg>
             </div>
-            <p class="dl-card__title">Step Mark — Dark</p>
-            <p class="dl-card__desc">Standalone brand mark in dark navy. For single-color or reversed applications.</p>
+            <p class="dl-card__title">Anchor Mark — Dark</p>
+            <p class="dl-card__desc">Standalone brand mark in Brand Dark Navy. For single-color or reversed applications.</p>
             <div class="dl-badges">
               <span class="dl-badge dl-badge--svg">SVG</span>
+              <span class="dl-badge dl-badge--png">PNG</span>
               <span class="dl-badge dl-badge--color">Print</span>
             </div>
             <div class="dl-links">
-              <a class="dl-link dl-link--primary" href="assets/logos/claravine-mark-dark.svg" download>
+              <a class="dl-link dl-link--primary" href="assets/logos/claravine-anchor-dark.svg" download>
                 <span class="material-symbols-rounded" style="font-size:14px;">download</span>SVG
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-anchor-dark-48.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 48px
+              </a>
+              <a class="dl-link dl-link--secondary" href="assets/logos/claravine-anchor-dark-128.png" download>
+                <span class="material-symbols-rounded" style="font-size:14px;">download</span>PNG 128px
               </a>
             </div>
           </div>
@@ -3309,15 +3486,60 @@
        FOOTER
   ══════════════════════════════════════════ -->
   <footer class="footer">
-    <div class="footer__inner">
-      <a href="#" class="footer__logo" aria-label="Claravine">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 193 41" fill="none" aria-label="Claravine"><path d="M46.0059 8.93848C50.5063 8.93848 55.918 9.97743 55.918 15.6299V27.8945H55.9043C55.9043 30.0371 56.139 32.1801 56.6982 33.1396H50.4023C50.1942 32.4036 50.0127 31.6407 49.9736 30.8652C47.9965 33.0079 45.1345 33.7832 42.377 33.7832C38.0977 33.7831 34.6904 31.5483 34.6904 26.7109C34.6905 21.3875 38.527 20.0995 42.377 19.5605C46.188 18.969 49.7128 19.2315 49.7129 16.458C49.7129 13.6845 47.8794 13.2637 45.6943 13.2637C43.327 13.2637 41.8051 14.2629 41.584 16.8262H35.3799C35.7311 10.7532 40.9332 8.93857 46.0059 8.93848ZM174.309 8.89941C181.983 8.89941 185.703 15.6432 185.261 22.8994H168.976C169.145 27.0135 171.07 28.8798 174.517 28.8799C174.907 28.8799 175.284 28.8406 175.648 28.7617V33.6914C175.193 33.7308 174.751 33.7568 174.296 33.7568C167.168 33.7568 162.759 28.4465 162.759 21.3613C162.759 14.276 167.441 8.89941 174.296 8.89941H174.309ZM88.2012 8.89941C92.7015 8.89941 98.113 9.93779 98.1133 15.5898V27.8545C98.1133 29.997 98.334 32.1399 98.9062 33.0996H92.6113C92.4032 32.3635 92.2207 31.6007 92.1816 30.8252C90.2046 32.9679 87.3298 33.7441 84.5723 33.7441C80.3061 33.744 76.8985 31.5091 76.8984 26.6719C76.8984 21.3482 80.7353 20.0595 84.5723 19.5205C88.3834 18.929 91.9219 19.1916 91.9219 16.418C91.9217 13.6448 90.0744 13.2246 87.9023 13.2246C85.5352 13.2246 84.0132 14.2231 83.792 16.7861H77.5879C77.9263 10.7135 83.1286 8.89952 88.2012 8.89941ZM11.498 8.71582C12.4996 8.71582 13.4756 8.83362 14.4121 9.04395C14.6721 9.09651 14.9063 9.16184 15.1533 9.22754C15.2443 9.2538 15.3222 9.26771 15.4131 9.29395C15.4651 9.30709 15.531 9.32039 15.583 9.34668C19.1076 10.4904 21.826 13.2242 22.1123 17.6406H16.0508C15.6605 14.9988 14.0477 13.7374 11.4727 13.7373C7.50553 13.7373 6.19144 17.7723 6.19141 21.2295C6.19141 25.4096 7.93432 28.3281 11.3291 28.3281C13.5923 28.3281 14.8806 27.3157 15.583 26.0537V26.0938H21.7744C20.3696 30.9048 16.5706 33.5205 11.3809 33.5205C4.57835 33.5203 1.25194e-05 28.788 0 21.4531C0 14.1182 4.1882 8.71595 11.498 8.71582ZM151.338 8.91211C157.932 8.91211 159.598 12.7902 159.598 18.6396V33.1396H153.394V19.8096C153.393 15.932 152.301 14.0264 149.413 14.0264C146.044 14.0264 144.601 15.9847 144.601 20.7695V33.165H138.396V9.54395H144.288V12.8301H144.418C145.992 10.1747 148.711 8.89941 151.325 8.89941L151.338 8.91211ZM31.6982 33.1523H24.9736V0.81543H31.6982V33.1523ZM74.0371 9.79297C74.4793 9.79302 74.9995 9.89885 75.3896 10.0303V16.3262C74.8303 16.1816 73.9064 16.0898 73.165 16.0898C68.6259 16.09 67.0519 19.5075 67.0518 23.6611V33.1523H60.8477V10.1348H66.7402V14.8018H66.8174L66.8311 14.8145C67.9758 11.8438 71.0196 9.79297 74.0371 9.79297ZM132.23 33.1523H126.026V9.79297H132.23V33.1523ZM111.602 25.6465H111.705L116.466 9.53027H122.618L114.983 33.126H108.076L100.35 9.53027H106.854L111.602 25.6465ZM49.7266 21.5977C48.686 22.5573 46.5003 22.6099 44.5752 22.9648C42.6502 23.3855 40.9072 24.0038 40.9072 26.4355C40.9074 28.8669 42.6893 29.4452 44.7051 29.4453C49.5567 29.4453 49.7266 25.4358 49.7266 24.0293V21.5977ZM91.9082 21.5713C90.8676 22.5307 88.6697 22.5704 86.7578 22.9385C84.8328 23.3591 83.0898 23.9905 83.0898 26.4092C83.09 28.8275 84.8718 29.4189 86.8877 29.4189C91.7394 29.4189 91.9082 25.4095 91.9082 24.0029V21.5713ZM174.14 13.7764C170.211 13.7764 169.067 16.9707 168.989 18.7979H179.069C178.497 15.5116 177.144 13.7764 174.14 13.7764ZM132.205 6.44141H126.026V0H132.205V6.44141Z" fill="#FFFFFF"/><path d="M181.19 28.6304V41.0001H186.483V34.204H193V28.6304H181.19Z" fill="#5DD39E"/></svg>
-      </a>
-      <p class="footer__meta">
-        © 2026 Claravine. The Data Standards Company™. No Data Drama®. All rights reserved.<br>
-        770 E. Main Street #360, Lehi, Utah 84043 · <a href="mailto:info@claravine.com" style="color:var(--cv-green);">info@claravine.com</a>
-      </p>
-      <span class="footer__version">Brand Standards v1.4 · Last updated March 2026</span>
+    <!-- Top section: logo, tagline, nav columns -->
+    <div class="footer__top">
+      <div class="footer__brand-col">
+        <a href="#" class="footer__logo" id="footer-home-btn" aria-label="Claravine home">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 193 41" fill="none" aria-label="Claravine"><path d="M46.0059 8.93848C50.5063 8.93848 55.918 9.97743 55.918 15.6299V27.8945H55.9043C55.9043 30.0371 56.139 32.1801 56.6982 33.1396H50.4023C50.1942 32.4036 50.0127 31.6407 49.9736 30.8652C47.9965 33.0079 45.1345 33.7832 42.377 33.7832C38.0977 33.7831 34.6904 31.5483 34.6904 26.7109C34.6905 21.3875 38.527 20.0995 42.377 19.5605C46.188 18.969 49.7128 19.2315 49.7129 16.458C49.7129 13.6845 47.8794 13.2637 45.6943 13.2637C43.327 13.2637 41.8051 14.2629 41.584 16.8262H35.3799C35.7311 10.7532 40.9332 8.93857 46.0059 8.93848ZM174.309 8.89941C181.983 8.89941 185.703 15.6432 185.261 22.8994H168.976C169.145 27.0135 171.07 28.8798 174.517 28.8799C174.907 28.8799 175.284 28.8406 175.648 28.7617V33.6914C175.193 33.7308 174.751 33.7568 174.296 33.7568C167.168 33.7568 162.759 28.4465 162.759 21.3613C162.759 14.276 167.441 8.89941 174.296 8.89941H174.309ZM88.2012 8.89941C92.7015 8.89941 98.113 9.93779 98.1133 15.5898V27.8545C98.1133 29.997 98.334 32.1399 98.9062 33.0996H92.6113C92.4032 32.3635 92.2207 31.6007 92.1816 30.8252C90.2046 32.9679 87.3298 33.7441 84.5723 33.7441C80.3061 33.744 76.8985 31.5091 76.8984 26.6719C76.8984 21.3482 80.7353 20.0595 84.5723 19.5205C88.3834 18.929 91.9219 19.1916 91.9219 16.418C91.9217 13.6448 90.0744 13.2246 87.9023 13.2246C85.5352 13.2246 84.0132 14.2231 83.792 16.7861H77.5879C77.9263 10.7135 83.1286 8.89952 88.2012 8.89941ZM11.498 8.71582C12.4996 8.71582 13.4756 8.83362 14.4121 9.04395C14.6721 9.09651 14.9063 9.16184 15.1533 9.22754C15.2443 9.2538 15.3222 9.26771 15.4131 9.29395C15.4651 9.30709 15.531 9.32039 15.583 9.34668C19.1076 10.4904 21.826 13.2242 22.1123 17.6406H16.0508C15.6605 14.9988 14.0477 13.7374 11.4727 13.7373C7.50553 13.7373 6.19144 17.7723 6.19141 21.2295C6.19141 25.4096 7.93432 28.3281 11.3291 28.3281C13.5923 28.3281 14.8806 27.3157 15.583 26.0537V26.0938H21.7744C20.3696 30.9048 16.5706 33.5205 11.3809 33.5205C4.57835 33.5203 1.25194e-05 28.788 0 21.4531C0 14.1182 4.1882 8.71595 11.498 8.71582ZM151.338 8.91211C157.932 8.91211 159.598 12.7902 159.598 18.6396V33.1396H153.394V19.8096C153.393 15.932 152.301 14.0264 149.413 14.0264C146.044 14.0264 144.601 15.9847 144.601 20.7695V33.165H138.396V9.54395H144.288V12.8301H144.418C145.992 10.1747 148.711 8.89941 151.325 8.89941L151.338 8.91211ZM31.6982 33.1523H24.9736V0.81543H31.6982V33.1523ZM74.0371 9.79297C74.4793 9.79302 74.9995 9.89885 75.3896 10.0303V16.3262C74.8303 16.1816 73.9064 16.0898 73.165 16.0898C68.6259 16.09 67.0519 19.5075 67.0518 23.6611V33.1523H60.8477V10.1348H66.7402V14.8018H66.8174L66.8311 14.8145C67.9758 11.8438 71.0196 9.79297 74.0371 9.79297ZM132.23 33.1523H126.026V9.79297H132.23V33.1523ZM111.602 25.6465H111.705L116.466 9.53027H122.618L114.983 33.126H108.076L100.35 9.53027H106.854L111.602 25.6465ZM49.7266 21.5977C48.686 22.5573 46.5003 22.6099 44.5752 22.9648C42.6502 23.3855 40.9072 24.0038 40.9072 26.4355C40.9074 28.8669 42.6893 29.4452 44.7051 29.4453C49.5567 29.4453 49.7266 25.4358 49.7266 24.0293V21.5977ZM91.9082 21.5713C90.8676 22.5307 88.6697 22.5704 86.7578 22.9385C84.8328 23.3591 83.0898 23.9905 83.0898 26.4092C83.09 28.8275 84.8718 29.4189 86.8877 29.4189C91.7394 29.4189 91.9082 25.4095 91.9082 24.0029V21.5713ZM174.14 13.7764C170.211 13.7764 169.067 16.9707 168.989 18.7979H179.069C178.497 15.5116 177.144 13.7764 174.14 13.7764ZM132.205 6.44141H126.026V0H132.205V6.44141Z" fill="#FFFFFF"/><path d="M181.19 28.6304V41.0001H186.483V34.204H193V28.6304H181.19Z" fill="#5DD39E"/></svg>
+        </a>
+        <p class="footer__tagline">The Data Standards Company™ — bringing order to marketing data with shared language and architecture for brands and agencies worldwide.</p>
+        <p class="footer__contact">
+          770 E. Main Street #360, Lehi, UT 84043<br>
+          <a href="mailto:info@claravine.com">info@claravine.com</a><br>
+          <a href="https://claravine.com" target="_blank" rel="noopener">claravine.com</a>
+        </p>
+      </div>
+      <div>
+        <p class="footer__col-title">Brand Guide</p>
+        <ul class="footer__links">
+          <li><a href="#" onclick="event.preventDefault(); showPanel('overview')">Overview</a></li>
+          <li><a href="#" onclick="event.preventDefault(); showPanel('colors')">Colors</a></li>
+          <li><a href="#" onclick="event.preventDefault(); showPanel('typography')">Typography</a></li>
+          <li><a href="#" onclick="event.preventDefault(); showPanel('components')">Components</a></li>
+          <li><a href="#" onclick="event.preventDefault(); showPanel('iconography')">Iconography</a></li>
+          <li><a href="#" onclick="event.preventDefault(); showPanel('logo')">Logo Usage</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Guidelines</p>
+        <ul class="footer__links">
+          <li><a href="#" onclick="event.preventDefault(); showPanel('voice')">Voice &amp; Tone</a></li>
+          <li><a href="#" onclick="event.preventDefault(); showPanel('motion')">Motion</a></li>
+          <li><a href="#" onclick="event.preventDefault(); showPanel('downloads')">Downloads</a></li>
+          <li><a href="#" onclick="event.preventDefault(); showPanel('living')">Living System</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__col-title">Company</p>
+        <ul class="footer__links">
+          <li><a href="https://claravine.com" target="_blank" rel="noopener">Website</a></li>
+          <li><a href="https://claravine.com/blog" target="_blank" rel="noopener">Blog</a></li>
+          <li><a href="https://claravine.com/about" target="_blank" rel="noopener">About</a></li>
+          <li><a href="https://claravine.com/contact" target="_blank" rel="noopener">Contact</a></li>
+          <li><a href="mailto:info@claravine.com">Support</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- Bottom bar: copyright + legal -->
+    <div class="footer__bottom">
+      <div class="footer__bottom-inner">
+        <p class="footer__copy">© 2026 Claravine, Inc. The Data Standards Company™. No Data Drama®. All rights reserved.</p>
+        <ul class="footer__legal">
+          <li><a href="https://claravine.com/privacy" target="_blank" rel="noopener">Privacy Policy</a></li>
+          <li><a href="https://claravine.com/terms" target="_blank" rel="noopener">Terms of Service</a></li>
+        </ul>
+        <span class="footer__version-tag">Brand Standards v1.5 · Mar 2026</span>
+      </div>
     </div>
   </footer>
 
@@ -3382,32 +3604,14 @@
   })();
 </script>
 
-<!-- Hero gradient: §5 SMIL hover speed-up (1.25×) -->
-<script>
-(function() {
-  var hero = document.getElementById('cv-hero');
-  if (!hero) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var anims = hero.querySelectorAll('animateTransform, animate');
-  var factor = 0.8; // 0.8 × base dur ≈ 1.25× faster
-  anims.forEach(function(a) { a._baseDur = parseFloat(a.getAttribute('dur')) || 36; });
-  hero.addEventListener('mouseenter', function() {
-    anims.forEach(function(a) { a.setAttribute('dur', (a._baseDur * factor).toFixed(1) + 's'); });
-  });
-  hero.addEventListener('mouseleave', function() {
-    anims.forEach(function(a) { a.setAttribute('dur', a._baseDur + 's'); });
-  });
-})();
-</script>
-
-
 <!-- ── Panel navigation + mobile sidebar ───────────────────────────────── -->
 <script>
 (function () {
   'use strict';
 
   var panels    = document.querySelectorAll('.cv-panel');
-  var navBtns   = document.querySelectorAll('.sidebar__item[data-panel]');
+  /* navBtns covers both sidebar items AND desktop topbar items */
+  var navBtns   = document.querySelectorAll('[data-panel]');
   var sidebar   = document.getElementById('sidebar');
   var overlay   = document.getElementById('sidebar-overlay');
   var menuBtn   = document.getElementById('menu-btn');
@@ -3415,7 +3619,7 @@
   var mobileHome= document.getElementById('mobile-home-btn');
   var content   = document.getElementById('content');
 
-  /* Show a named panel */
+  /* Show a named panel — syncs active state on both navbars */
   function showPanel(id) {
     panels.forEach(function (p) { p.classList.remove('cv-panel--active'); });
     navBtns.forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-current', 'false'); });
@@ -3424,15 +3628,18 @@
     if (!target) { showHome(); return; }
     target.classList.add('cv-panel--active');
 
-    var btn = document.querySelector('.sidebar__item[data-panel="' + id + '"]');
-    if (btn) { btn.classList.add('is-active'); btn.setAttribute('aria-current', 'true'); }
+    /* Mark active on every nav button with matching data-panel (sidebar + topbar) */
+    document.querySelectorAll('[data-panel="' + id + '"]').forEach(function (b) {
+      b.classList.add('is-active');
+      b.setAttribute('aria-current', 'true');
+    });
 
     if (content) content.scrollTop = 0;
     history.replaceState(null, '', '#' + id);
     closeSidebar();
   }
 
-  /* Show home (hero) */
+  /* Show home (hero) — clears active state on all nav buttons */
   function showHome() {
     panels.forEach(function (p) { p.classList.remove('cv-panel--active'); });
     navBtns.forEach(function (b) { b.classList.remove('is-active'); b.setAttribute('aria-current', 'false'); });
@@ -3466,6 +3673,14 @@
   if (menuBtn)    menuBtn.addEventListener('click',    function ()  { openSidebar(); });
   if (overlay)    overlay.addEventListener('click',   function ()  { closeSidebar(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSidebar(); });
+
+  /* Wire footer home link */
+  var footerHome = document.getElementById('footer-home-btn');
+  if (footerHome) footerHome.addEventListener('click', function (e) { e.preventDefault(); showHome(); });
+
+  /* Expose showPanel + showHome globally for footer inline onclick handlers */
+  window.showPanel = showPanel;
+  window.showHome  = showHome;
 
   /* Honour URL hash on load */
   var PANELS = ['overview','colors','typography','components',
