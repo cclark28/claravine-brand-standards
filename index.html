@@ -587,9 +587,15 @@
     }
 
     .icon-cell .material-symbols-rounded {
-      font-size: 32px;
+      font-size: 24px;
       margin-bottom: var(--sp-2);
-      font-variation-settings: 'FILL' 0;
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 40;
+      color: var(--cv-dark);
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .icon-cell__label {
@@ -1042,11 +1048,345 @@
       .mobile-topbar { display: flex; }
       .do-dont-grid { grid-template-columns: 1fr; }
       .ls-bottom { grid-template-columns: 1fr; }
+      .logo-dodont-grid { grid-template-columns: 1fr 1fr; }
+      .state-row { flex-wrap: wrap; }
     }
 
     @media (max-width: 1024px) {
       .cv-grid { grid-template-columns: 1fr; gap: var(--sp-5); }
       .icon-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+    }
+
+    /* ====================================================
+       SIDEBAR LOGO
+    ==================================================== */
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .sidebar-logo__text {
+      font-family: var(--font-primary);
+      font-size: 17px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: -0.015em;
+      line-height: 1;
+    }
+    .sidebar-logo__mark {
+      height: 14px;
+      width: auto;
+      flex-shrink: 0;
+    }
+
+    /* Mobile topbar logo */
+    .mobile-logo {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .mobile-logo__text {
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 600;
+      color: #FFFFFF;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .mobile-logo__mark {
+      height: 12px;
+      width: auto;
+    }
+
+    /* ====================================================
+       BUTTON SYSTEM — All States
+    ==================================================== */
+    .cv-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--font-primary);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.01em;
+      border-radius: var(--radius-md);
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      padding: 9px 18px;
+      transition:
+        background 0.16s cubic-bezier(0.4,0,0.2,1),
+        border-color 0.16s cubic-bezier(0.4,0,0.2,1),
+        color 0.16s cubic-bezier(0.4,0,0.2,1),
+        box-shadow 0.16s cubic-bezier(0.4,0,0.2,1),
+        transform 0.1s cubic-bezier(0.4,0,0.2,1);
+      white-space: nowrap;
+      text-decoration: none;
+      -webkit-font-smoothing: antialiased;
+    }
+    .cv-btn--sm { font-size: var(--text-xs); padding: 6px 14px; border-radius: var(--radius-sm); }
+    .cv-btn--lg { font-size: var(--text-base); padding: 12px 24px; border-radius: var(--radius-lg); }
+
+    /* Primary */
+    .cv-btn--primary { background: var(--cv-green); color: #FFF; border-color: var(--cv-green); }
+    .cv-btn--primary:hover { background: #4DBF86; border-color: #4DBF86; box-shadow: 0 2px 8px rgba(93,211,158,0.36); }
+    .cv-btn--primary:active { background: #3DAD74; border-color: #3DAD74; transform: scale(0.97); box-shadow: none; }
+    .cv-btn--primary.is-disabled,
+    .cv-btn--primary:disabled { background: #C4EDDA; border-color: #C4EDDA; color: rgba(255,255,255,0.65); cursor: not-allowed; pointer-events: none; }
+    .cv-btn--primary.is-shadow { box-shadow: 0 4px 16px rgba(93,211,158,0.45); }
+
+    /* Secondary */
+    .cv-btn--secondary { background: transparent; color: var(--cv-green); border-color: var(--cv-green); }
+    .cv-btn--secondary:hover { background: rgba(93,211,158,0.08); box-shadow: 0 2px 8px rgba(93,211,158,0.18); }
+    .cv-btn--secondary:active { background: rgba(93,211,158,0.16); transform: scale(0.97); box-shadow: none; }
+    .cv-btn--secondary.is-disabled,
+    .cv-btn--secondary:disabled { color: #C4EDDA; border-color: #C4EDDA; cursor: not-allowed; pointer-events: none; }
+    .cv-btn--secondary.is-shadow { box-shadow: 0 4px 12px rgba(93,211,158,0.22); }
+
+    /* Ghost / Tertiary */
+    .cv-btn--ghost { background: transparent; color: var(--cv-green); border-color: transparent; }
+    .cv-btn--ghost:hover { background: rgba(93,211,158,0.08); }
+    .cv-btn--ghost:active { background: rgba(93,211,158,0.16); transform: scale(0.97); }
+    .cv-btn--ghost.is-disabled,
+    .cv-btn--ghost:disabled { color: #C4EDDA; cursor: not-allowed; pointer-events: none; }
+
+    /* Neutral */
+    .cv-btn--neutral { background: #F5F8F9; color: var(--cv-dark); border-color: #DDE5E8; }
+    .cv-btn--neutral:hover { background: #ECF0F2; border-color: #C4D0D5; box-shadow: 0 2px 6px rgba(38,63,72,0.10); }
+    .cv-btn--neutral:active { background: #E0E8EB; transform: scale(0.97); box-shadow: none; }
+    .cv-btn--neutral.is-disabled,
+    .cv-btn--neutral:disabled { background: #F5F8F9; color: #B0C0C5; border-color: #DDE5E8; cursor: not-allowed; pointer-events: none; }
+    .cv-btn--neutral.is-shadow { box-shadow: 0 2px 8px rgba(38,63,72,0.12); }
+
+    /* Dark */
+    .cv-btn--dark { background: var(--cv-dark); color: #FFF; border-color: var(--cv-dark); }
+    .cv-btn--dark:hover { background: #304F58; box-shadow: 0 2px 8px rgba(38,63,72,0.28); }
+    .cv-btn--dark:active { background: #1A2E34; transform: scale(0.97); box-shadow: none; }
+    .cv-btn--dark.is-disabled,
+    .cv-btn--dark:disabled { background: #8FA4AA; border-color: #8FA4AA; cursor: not-allowed; pointer-events: none; }
+    .cv-btn--dark.is-shadow { box-shadow: 0 4px 14px rgba(38,63,72,0.30); }
+
+    /* Frozen demo states (for documentation table — not interactive) */
+    .cv-btn--demo-hover.cv-btn--primary { background: #4DBF86; border-color: #4DBF86; box-shadow: 0 2px 8px rgba(93,211,158,0.36); }
+    .cv-btn--demo-active.cv-btn--primary { background: #3DAD74; border-color: #3DAD74; transform: scale(0.97); box-shadow: none; }
+    .cv-btn--demo-hover.cv-btn--secondary { background: rgba(93,211,158,0.08); box-shadow: 0 2px 8px rgba(93,211,158,0.18); }
+    .cv-btn--demo-active.cv-btn--secondary { background: rgba(93,211,158,0.16); transform: scale(0.97); box-shadow: none; }
+    .cv-btn--demo-hover.cv-btn--ghost { background: rgba(93,211,158,0.08); }
+    .cv-btn--demo-active.cv-btn--ghost { background: rgba(93,211,158,0.16); transform: scale(0.97); }
+    .cv-btn--demo-hover.cv-btn--neutral { background: #ECF0F2; border-color: #C4D0D5; box-shadow: 0 2px 6px rgba(38,63,72,0.10); }
+    .cv-btn--demo-active.cv-btn--neutral { background: #E0E8EB; transform: scale(0.97); box-shadow: none; }
+    .cv-btn--demo-hover.cv-btn--dark { background: #304F58; box-shadow: 0 2px 8px rgba(38,63,72,0.28); }
+    .cv-btn--demo-active.cv-btn--dark { background: #1A2E34; transform: scale(0.97); box-shadow: none; }
+
+    /* State row display */
+    .state-section { margin-bottom: var(--sp-7); }
+    .state-section__heading {
+      font-family: var(--font-primary);
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: var(--cv-dark);
+      margin-bottom: var(--sp-4);
+    }
+    .state-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--sp-4);
+      padding: var(--sp-5);
+      background: #FFFFFF;
+      border: 1px solid #DDE5E8;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--sp-3);
+    }
+    .state-row--dark { background: var(--cv-dark); border-color: rgba(255,255,255,0.12); }
+    .state-row__label {
+      font-family: var(--font-primary);
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(38,63,72,0.38);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      min-width: 80px;
+      flex-shrink: 0;
+    }
+    .state-row--dark .state-row__label { color: rgba(255,255,255,0.35); }
+    .shadow-rationale {
+      background: rgba(93,211,158,0.06);
+      border: 1px solid rgba(93,211,158,0.20);
+      border-left: 3px solid var(--cv-green);
+      padding: var(--sp-4);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      color: #5A7078;
+      line-height: 1.65;
+      margin-top: var(--sp-5);
+    }
+
+    /* ====================================================
+       COLOR SWATCHES — Interactive
+    ==================================================== */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-6);
+    }
+    .color-swatch-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.15s cubic-bezier(0.4,0,0.2,1), box-shadow 0.15s;
+      border: 1px solid rgba(0,0,0,0.08);
+      user-select: none;
+    }
+    .color-swatch-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+    .color-swatch-card:active { transform: scale(0.97); }
+    .swatch-block {
+      height: 64px;
+      position: relative;
+    }
+    .swatch-copy-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.38);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.14s;
+      font-family: var(--font-primary);
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 0.02em;
+    }
+    .color-swatch-card:hover .swatch-copy-overlay { opacity: 1; }
+    .swatch-meta {
+      padding: 8px 10px 10px;
+      background: #FFFFFF;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .swatch-name {
+      font-family: var(--font-primary);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--cv-dark);
+      margin-bottom: 2px;
+    }
+    .swatch-hex {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      color: #5A7078;
+      margin-bottom: 3px;
+    }
+    .swatch-cmyk {
+      font-size: 9.5px;
+      color: #8FA4AA;
+      font-family: var(--font-primary);
+      letter-spacing: 0.01em;
+    }
+
+    /* ====================================================
+       LOGO DO/DON'T CARDS
+    ==================================================== */
+    .logo-dodont-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--sp-4);
+      margin: var(--sp-5) 0;
+    }
+    .logo-dodont-card {
+      border: 1px solid #DDE5E8;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .logo-dodont-card--do  { border-top: 3px solid var(--cv-green); }
+    .logo-dodont-card--dont { border-top: 3px solid #FF6B6B; }
+    .logo-dodont-card__preview {
+      background: #FFFFFF;
+      padding: var(--sp-5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 90px;
+    }
+    .logo-dodont-card__label {
+      font-family: var(--font-primary);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 12px 2px;
+    }
+    .logo-dodont-card--do   .logo-dodont-card__label { color: var(--cv-green); }
+    .logo-dodont-card--dont .logo-dodont-card__label { color: #FF6B6B; }
+    .logo-dodont-card__desc {
+      font-size: var(--text-xs);
+      color: #5A7078;
+      padding: 2px 12px 12px;
+      line-height: 1.5;
+    }
+
+    /* ====================================================
+       MOTION DEMO — White containers
+    ==================================================== */
+    .motion-demo {
+      background: #FFFFFF !important;
+      border: 1px solid #DDE5E8 !important;
+    }
+
+    /* ====================================================
+       COPY TOAST
+    ==================================================== */
+    .copy-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: var(--cv-dark);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 100px;
+      font-family: var(--font-primary);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .copy-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ====================================================
+       ICON SIZE SCALE
+    ==================================================== */
+    .icon-size-scale {
+      display: flex;
+      gap: var(--sp-6);
+      align-items: flex-end;
+      flex-wrap: wrap;
+      padding: var(--sp-5) var(--sp-6);
+      background: #FFFFFF;
+      border: 1px solid #DDE5E8;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--sp-6);
+    }
+    .icon-size-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--sp-2);
+    }
+    .icon-size-item__label {
+      font-family: var(--font-primary);
+      font-size: var(--text-2xs);
+      color: #8FA4AA;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -1057,10 +1397,12 @@
     <aside class="sidebar">
       <div class="sidebar__header">
         <button class="sidebar__logo-btn" aria-label="Home">
-          <svg viewBox="0 0 200 32" xmlns="http://www.w3.org/2000/svg" fill="none">
-            <path d="M30.5 8L24 24M24 8L30.5 24M36 8H42C44.2 8 46 9.8 46 12V20C46 22.2 44.2 24 42 24H36" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <text x="50" y="20" font-family="Poppins, sans-serif" font-size="16" font-weight="600" fill="white">Claravine</text>
-          </svg>
+          <div class="sidebar-logo">
+            <span class="sidebar-logo__text">Claravine</span>
+            <svg class="sidebar-logo__mark" viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/>
+            </svg>
+          </div>
         </button>
       </div>
 
@@ -1121,6 +1463,23 @@
 
     <!-- MAIN CONTENT -->
     <div class="content" id="content">
+
+      <!-- MOBILE TOPBAR -->
+      <div class="mobile-topbar">
+        <a class="mobile-topbar__logo" href="#" aria-label="Home">
+          <div class="mobile-logo">
+            <span class="mobile-logo__text">Claravine</span>
+            <svg class="mobile-logo__mark" viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/>
+            </svg>
+          </div>
+        </a>
+        <span class="mobile-topbar__version">v1.4</span>
+        <button class="mobile-menu-btn" aria-label="Open menu">
+          <span class="material-symbols-rounded">menu</span>
+        </button>
+      </div>
+      <div class="sidebar-overlay"></div>
 
       <!-- OVERVIEW / HERO -->
       <section id="overview" class="hero" aria-labelledby="overview-heading">
@@ -1220,42 +1579,116 @@
           <!-- Primary Colors -->
           <div style="margin: var(--sp-7) 0;">
             <h3 class="sub-title">Primary Brand Colors</h3>
-            <div class="color-scale">
-              <div style="background: var(--cv-green); padding: var(--sp-4); border-radius: var(--radius-md); text-align: center; color: white;">
-                <div style="font-family: var(--font-primary); font-weight: 600; font-size: var(--text-xs);">Primary Green</div>
-                <div style="font-size: 11px; opacity: 0.85;">#5DD39E</div>
+            <p class="sub-desc">Click any swatch to copy the hex value to clipboard.</p>
+            <div class="swatch-grid">
+
+              <!-- Primary Green -->
+              <div class="color-swatch-card" onclick="copyHex(this,'#5DD39E')" role="button" aria-label="Copy #5DD39E">
+                <div class="swatch-block" style="background:#5DD39E;">
+                  <div class="swatch-copy-overlay">
+                    <span class="material-symbols-rounded" style="color:#fff;font-size:22px;line-height:1;">content_copy</span>
+                  </div>
+                </div>
+                <div class="swatch-info">
+                  <div class="swatch-name">Primary Green</div>
+                  <div class="swatch-hex">#5DD39E</div>
+                  <div class="swatch-cmyk">C:56 M:0 Y:25 K:17</div>
+                </div>
               </div>
-              <div style="background: var(--cv-dark); padding: var(--sp-4); border-radius: var(--radius-md); text-align: center; color: white;">
-                <div style="font-family: var(--font-primary); font-weight: 600; font-size: var(--text-xs);">Brand Dark</div>
-                <div style="font-size: 11px; opacity: 0.85;">#263F48</div>
+
+              <!-- Brand Dark -->
+              <div class="color-swatch-card" onclick="copyHex(this,'#263F48')" role="button" aria-label="Copy #263F48">
+                <div class="swatch-block" style="background:#263F48;">
+                  <div class="swatch-copy-overlay">
+                    <span class="material-symbols-rounded" style="color:#fff;font-size:22px;line-height:1;">content_copy</span>
+                  </div>
+                </div>
+                <div class="swatch-info">
+                  <div class="swatch-name">Brand Dark</div>
+                  <div class="swatch-hex">#263F48</div>
+                  <div class="swatch-cmyk">C:47 M:12 Y:0 K:72</div>
+                </div>
               </div>
-              <div style="background: var(--cv-white); padding: var(--sp-4); border-radius: var(--radius-md); text-align: center; color: var(--cv-dark); border: 1px solid #DDE5E8;">
-                <div style="font-family: var(--font-primary); font-weight: 600; font-size: var(--text-xs);">White</div>
-                <div style="font-size: 11px;">#FFFFFF</div>
+
+              <!-- White -->
+              <div class="color-swatch-card" onclick="copyHex(this,'#FFFFFF')" role="button" aria-label="Copy #FFFFFF">
+                <div class="swatch-block" style="background:#FFFFFF;border-bottom:1px solid #DDE5E8;">
+                  <div class="swatch-copy-overlay">
+                    <span class="material-symbols-rounded" style="color:#263F48;font-size:22px;line-height:1;">content_copy</span>
+                  </div>
+                </div>
+                <div class="swatch-info">
+                  <div class="swatch-name">White</div>
+                  <div class="swatch-hex">#FFFFFF</div>
+                  <div class="swatch-cmyk">C:0 M:0 Y:0 K:0</div>
+                </div>
               </div>
+
             </div>
           </div>
 
           <!-- Secondary Colors -->
           <div style="margin: var(--sp-7) 0;">
             <h3 class="sub-title">Secondary Colors</h3>
-            <div class="color-scale">
-              <div style="background: var(--cv-sky); padding: var(--sp-4); border-radius: var(--radius-md); text-align: center; color: var(--cv-dark);">
-                <div style="font-family: var(--font-primary); font-weight: 600; font-size: var(--text-xs);">Sky Blue</div>
-                <div style="font-size: 11px;">#93DCFF</div>
+            <p class="sub-desc">Click any swatch to copy the hex value to clipboard.</p>
+            <div class="swatch-grid">
+
+              <!-- Sky Blue -->
+              <div class="color-swatch-card" onclick="copyHex(this,'#93DCFF')" role="button" aria-label="Copy #93DCFF">
+                <div class="swatch-block" style="background:#93DCFF;">
+                  <div class="swatch-copy-overlay">
+                    <span class="material-symbols-rounded" style="color:#263F48;font-size:22px;line-height:1;">content_copy</span>
+                  </div>
+                </div>
+                <div class="swatch-info">
+                  <div class="swatch-name">Sky Blue</div>
+                  <div class="swatch-hex">#93DCFF</div>
+                  <div class="swatch-cmyk">C:42 M:14 Y:0 K:0</div>
+                </div>
               </div>
-              <div style="background: var(--cv-blue); padding: var(--sp-4); border-radius: var(--radius-md); text-align: center; color: white;">
-                <div style="font-family: var(--font-primary); font-weight: 600; font-size: var(--text-xs);">Brand Blue</div>
-                <div style="font-size: 11px;">#004AAD</div>
+
+              <!-- Brand Blue -->
+              <div class="color-swatch-card" onclick="copyHex(this,'#004AAD')" role="button" aria-label="Copy #004AAD">
+                <div class="swatch-block" style="background:#004AAD;">
+                  <div class="swatch-copy-overlay">
+                    <span class="material-symbols-rounded" style="color:#fff;font-size:22px;line-height:1;">content_copy</span>
+                  </div>
+                </div>
+                <div class="swatch-info">
+                  <div class="swatch-name">Brand Blue</div>
+                  <div class="swatch-hex">#004AAD</div>
+                  <div class="swatch-cmyk">C:100 M:57 Y:0 K:32</div>
+                </div>
               </div>
-              <div style="background: var(--cv-forest); padding: var(--sp-4); border-radius: var(--radius-md); text-align: center; color: white;">
-                <div style="font-family: var(--font-primary); font-weight: 600; font-size: var(--text-xs);">Forest Green</div>
-                <div style="font-size: 11px;">#33985E</div>
+
+              <!-- Forest Green -->
+              <div class="color-swatch-card" onclick="copyHex(this,'#33985E')" role="button" aria-label="Copy #33985E">
+                <div class="swatch-block" style="background:#33985E;">
+                  <div class="swatch-copy-overlay">
+                    <span class="material-symbols-rounded" style="color:#fff;font-size:22px;line-height:1;">content_copy</span>
+                  </div>
+                </div>
+                <div class="swatch-info">
+                  <div class="swatch-name">Forest Green</div>
+                  <div class="swatch-hex">#33985E</div>
+                  <div class="swatch-cmyk">C:66 M:0 Y:38 K:40</div>
+                </div>
               </div>
-              <div style="background: var(--cv-yellow); padding: var(--sp-4); border-radius: var(--radius-md); text-align: center; color: var(--cv-dark);">
-                <div style="font-family: var(--font-primary); font-weight: 600; font-size: var(--text-xs);">Brand Yellow</div>
-                <div style="font-size: 11px;">#FDCE00</div>
+
+              <!-- Brand Yellow -->
+              <div class="color-swatch-card" onclick="copyHex(this,'#FDCE00')" role="button" aria-label="Copy #FDCE00">
+                <div class="swatch-block" style="background:#FDCE00;">
+                  <div class="swatch-copy-overlay">
+                    <span class="material-symbols-rounded" style="color:#263F48;font-size:22px;line-height:1;">content_copy</span>
+                  </div>
+                </div>
+                <div class="swatch-info">
+                  <div class="swatch-name">Brand Yellow</div>
+                  <div class="swatch-hex">#FDCE00</div>
+                  <div class="swatch-cmyk">C:0 M:19 Y:100 K:0</div>
+                </div>
               </div>
+
             </div>
           </div>
 
@@ -1409,37 +1842,149 @@
           <!-- Buttons -->
           <div style="margin: var(--sp-7) 0;">
             <h3 class="sub-title">Buttons</h3>
+            <p class="sub-desc">All buttons use <code>font-family: Poppins</code>, <code>font-size: 14px</code>, <code>font-weight: 600</code>. Variants and states are defined below.</p>
 
-            <div class="btn-panel">
-              <span class="btn-group__label">Primary Button</span>
-              <div class="btn-group">
-                <button style="padding: 10px 20px; background: var(--cv-green); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Primary</button>
-                <button style="padding: 10px 20px; background: var(--cv-green); color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; opacity: 0.6;">Disabled</button>
-              </div>
+            <!-- State matrix table -->
+            <div style="overflow-x: auto; margin: var(--sp-5) 0;">
+              <table style="width: 100%; border-collapse: collapse; min-width: 640px;">
+                <thead>
+                  <tr>
+                    <th style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; text-align: left; padding: var(--sp-2) var(--sp-4); border-bottom: 1.5px solid #DDE5E8; letter-spacing: 0.05em; text-transform: uppercase; width: 140px;">Variant</th>
+                    <th style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; text-align: center; padding: var(--sp-2) var(--sp-3); border-bottom: 1.5px solid #DDE5E8; letter-spacing: 0.05em; text-transform: uppercase;">Default</th>
+                    <th style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; text-align: center; padding: var(--sp-2) var(--sp-3); border-bottom: 1.5px solid #DDE5E8; letter-spacing: 0.05em; text-transform: uppercase;">Hover</th>
+                    <th style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; text-align: center; padding: var(--sp-2) var(--sp-3); border-bottom: 1.5px solid #DDE5E8; letter-spacing: 0.05em; text-transform: uppercase;">Active</th>
+                    <th style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; text-align: center; padding: var(--sp-2) var(--sp-3); border-bottom: 1.5px solid #DDE5E8; letter-spacing: 0.05em; text-transform: uppercase;">Disabled</th>
+                    <th style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; text-align: center; padding: var(--sp-2) var(--sp-3); border-bottom: 1.5px solid #DDE5E8; letter-spacing: 0.05em; text-transform: uppercase;">Shadow</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Primary -->
+                  <tr>
+                    <td style="padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid #F0F4F6;">
+                      <span style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: var(--cv-dark);">Primary</span>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--primary">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--primary cv-btn--demo-hover">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--primary cv-btn--demo-active">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--primary is-disabled" disabled>Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--primary is-shadow">Label</button>
+                    </td>
+                  </tr>
+                  <!-- Secondary -->
+                  <tr>
+                    <td style="padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid #F0F4F6;">
+                      <span style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: var(--cv-dark);">Secondary</span>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--secondary">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--secondary cv-btn--demo-hover">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--secondary cv-btn--demo-active">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--secondary is-disabled" disabled>Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--secondary is-shadow">Label</button>
+                    </td>
+                  </tr>
+                  <!-- Ghost -->
+                  <tr>
+                    <td style="padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid #F0F4F6;">
+                      <span style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: var(--cv-dark);">Ghost</span>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--ghost">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--ghost cv-btn--demo-hover">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--ghost cv-btn--demo-active">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--ghost is-disabled" disabled>Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center; color: #8FA4AA; font-family: var(--font-primary); font-size: var(--text-xs);">—</td>
+                  </tr>
+                  <!-- Neutral -->
+                  <tr>
+                    <td style="padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid #F0F4F6;">
+                      <span style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: var(--cv-dark);">Neutral</span>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--neutral">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--neutral cv-btn--demo-hover">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--neutral cv-btn--demo-active">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--neutral is-disabled" disabled>Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center; color: #8FA4AA; font-family: var(--font-primary); font-size: var(--text-xs);">—</td>
+                  </tr>
+                  <!-- Dark -->
+                  <tr>
+                    <td style="padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid #F0F4F6;">
+                      <span style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: var(--cv-dark);">Dark</span>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--dark">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--dark cv-btn--demo-hover">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--dark cv-btn--demo-active">Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--dark is-disabled" disabled>Label</button>
+                    </td>
+                    <td style="padding: var(--sp-3); border-bottom: 1px solid #F0F4F6; text-align: center;">
+                      <button class="cv-btn cv-btn--dark is-shadow">Label</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
-            <div class="btn-panel">
-              <span class="btn-group__label">Secondary Button</span>
-              <div class="btn-group">
-                <button style="padding: 10px 20px; background: transparent; color: var(--cv-green); border: 2px solid var(--cv-green); border-radius: 6px; font-weight: 600; cursor: pointer;">Secondary</button>
-                <button style="padding: 10px 20px; background: transparent; color: var(--cv-green); border: 2px solid var(--cv-green); border-radius: 6px; font-weight: 600; cursor: pointer; opacity: 0.6;">Disabled</button>
-              </div>
+            <!-- Shadow rationale callout -->
+            <div style="background: #F5F8F9; border-left: 3px solid var(--cv-green); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) 0;">
+              <p style="font-family: var(--font-primary); font-size: var(--text-sm); font-weight: 600; color: var(--cv-dark); margin-bottom: var(--sp-2);">Shadow usage rationale</p>
+              <p style="font-family: var(--font-secondary); font-size: var(--text-sm); color: #5A7078; line-height: 1.6; margin: 0;">Use <code>is-shadow</code> on elevated or focused components: floating action buttons, sticky CTAs, modal confirm actions, and inline form submit buttons. Do not use shadow on inline text actions, ghost buttons, or buttons inside cards that already have elevation. Shadow communicates "this button can act right now" — reserve it for primary and dark variants only.</p>
             </div>
 
-            <div class="btn-panel">
-              <span class="btn-group__label">Tertiary / Text Button</span>
-              <div class="btn-group">
-                <button style="padding: 10px 20px; background: transparent; color: var(--cv-green); border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">Tertiary</button>
-                <button style="padding: 10px 20px; background: transparent; color: var(--cv-green); border: none; border-radius: 6px; font-weight: 600; cursor: pointer; opacity: 0.6;">Disabled</button>
-              </div>
-            </div>
-
-            <div class="btn-panel">
-              <span class="btn-group__label">Sizes</span>
-              <div class="btn-group">
-                <button style="padding: 8px 16px; background: var(--cv-green); color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer;">Small</button>
-                <button style="padding: 10px 20px; background: var(--cv-green); color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer;">Medium</button>
-                <button style="padding: 12px 24px; background: var(--cv-green); color: white; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; cursor: pointer;">Large</button>
+            <!-- Size scale -->
+            <div style="margin: var(--sp-6) 0;">
+              <h4 style="font-family: var(--font-primary); font-size: var(--text-sm); font-weight: 600; color: var(--cv-dark); margin-bottom: var(--sp-4);">Size Scale</h4>
+              <div style="display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap;">
+                <div style="text-align: center;">
+                  <button class="cv-btn cv-btn--primary cv-btn--sm">Small</button>
+                  <p style="font-family: var(--font-primary); font-size: var(--text-xs); color: #8FA4AA; margin-top: var(--sp-2);">12px · sm</p>
+                </div>
+                <div style="text-align: center;">
+                  <button class="cv-btn cv-btn--primary">Medium</button>
+                  <p style="font-family: var(--font-primary); font-size: var(--text-xs); color: #8FA4AA; margin-top: var(--sp-2);">14px · base</p>
+                </div>
+                <div style="text-align: center;">
+                  <button class="cv-btn cv-btn--primary cv-btn--lg">Large</button>
+                  <p style="font-family: var(--font-primary); font-size: var(--text-xs); color: #8FA4AA; margin-top: var(--sp-2);">16px · lg</p>
+                </div>
               </div>
             </div>
           </div>
@@ -1456,10 +2001,38 @@
             <p class="sh__desc">All icons use Google Material Symbols in outlined style (FILL=0). Icons are rendered at consistent sizes and use the brand color palette for coherence.</p>
           </div>
 
+          <!-- Icon Size Scale -->
+          <div style="margin: var(--sp-7) 0;">
+            <h3 class="sub-title">Icon Size Scale</h3>
+            <p class="sub-desc">Four standardized sizes. All use <code>font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 40</code> for consistent optical weight.</p>
+            <div style="display: flex; align-items: flex-end; gap: var(--sp-8); flex-wrap: wrap; background: #F5F8F9; border-radius: var(--radius-lg); padding: var(--sp-6); margin: var(--sp-4) 0;">
+              <div style="text-align: center;">
+                <span class="material-symbols-rounded" style="font-size:20px;font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 40;color:var(--cv-dark);display:block;">dashboard</span>
+                <p style="font-family:var(--font-primary);font-size:var(--text-xs);color:#8FA4AA;margin-top:var(--sp-2);">20px</p>
+                <p style="font-family:var(--font-primary);font-size:9px;color:#B0C0C5;">inline / dense</p>
+              </div>
+              <div style="text-align: center;">
+                <span class="material-symbols-rounded" style="font-size:24px;font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 40;color:var(--cv-dark);display:block;">dashboard</span>
+                <p style="font-family:var(--font-primary);font-size:var(--text-xs);color:#8FA4AA;margin-top:var(--sp-2);">24px</p>
+                <p style="font-family:var(--font-primary);font-size:9px;color:#B0C0C5;">standard UI</p>
+              </div>
+              <div style="text-align: center;">
+                <span class="material-symbols-rounded" style="font-size:32px;font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 40;color:var(--cv-dark);display:block;">dashboard</span>
+                <p style="font-family:var(--font-primary);font-size:var(--text-xs);color:#8FA4AA;margin-top:var(--sp-2);">32px</p>
+                <p style="font-family:var(--font-primary);font-size:9px;color:#B0C0C5;">feature / callout</p>
+              </div>
+              <div style="text-align: center;">
+                <span class="material-symbols-rounded" style="font-size:48px;font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 40;color:var(--cv-dark);display:block;">dashboard</span>
+                <p style="font-family:var(--font-primary);font-size:var(--text-xs);color:#8FA4AA;margin-top:var(--sp-2);">48px</p>
+                <p style="font-family:var(--font-primary);font-size:9px;color:#B0C0C5;">hero / empty states</p>
+              </div>
+            </div>
+          </div>
+
           <!-- Commonly Used Icons -->
           <div style="margin: var(--sp-7) 0;">
             <h3 class="sub-title">Commonly Used Icons</h3>
-            <p class="sub-desc">Display at 32px with consistent spacing. Use outlined variant exclusively.</p>
+            <p class="sub-desc">Standard 24px outlined (FILL=0, wght=300). Use these names consistently across all Claravine products.</p>
             <div class="icon-grid">
               <div class="icon-cell"><span class="material-symbols-rounded">home</span><div class="icon-cell__label">home</div></div>
               <div class="icon-cell"><span class="material-symbols-rounded">search</span><div class="icon-cell__label">search</div></div>
@@ -1496,46 +2069,94 @@
             <p class="sh__desc">The Claravine wordmark is a custom typeface paired with the Claravine step mark. The logo should be used consistently across all touchpoints.</p>
           </div>
 
-          <!-- Logo Variations -->
+          <!-- Full Logo Variations — 4 colorways -->
           <div style="margin: var(--sp-7) 0;">
-            <h3 class="sub-title">Full Logo Variation</h3>
-            <p class="sub-desc">Full wordmark with step mark, used on primary brand applications.</p>
-            <div style="background: var(--cv-white); border: 1px solid #DDE5E8; border-radius: var(--radius-lg); padding: var(--sp-6); text-align: center; margin: var(--sp-4) 0;">
-              <svg viewBox="0 0 200 32" xmlns="http://www.w3.org/2000/svg" style="height: 40px; margin: 0 auto;">
-                <text x="0" y="24" font-family="Poppins, sans-serif" font-size="24" font-weight="700" fill="#263F48">Claravine</text>
-                <rect x="140" y="12" width="8" height="8" fill="#5DD39E"/>
-              </svg>
+            <h3 class="sub-title">Logo Variations</h3>
+            <p class="sub-desc">The full wordmark (type + step mark) is the primary logo form. Use the correct colorway for each background context.</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--sp-5); margin: var(--sp-5) 0;">
+
+              <!-- Full Color on White -->
+              <div>
+                <p style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; margin-bottom: var(--sp-3); letter-spacing: 0.04em; text-transform: uppercase;">Full Color — Light bg</p>
+                <div style="background: #FFFFFF; border: 1px solid #DDE5E8; border-radius: var(--radius-lg); padding: var(--sp-6); display: flex; align-items: center; justify-content: center; min-height: 110px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-family: var(--font-primary); font-size: 32px; font-weight: 600; color: #263F48; letter-spacing: -0.02em; line-height: 1;">Claravine</span>
+                    <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height: 20px; width: auto;" aria-hidden="true">
+                      <path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- White on Dark -->
+              <div>
+                <p style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; margin-bottom: var(--sp-3); letter-spacing: 0.04em; text-transform: uppercase;">White — Dark bg</p>
+                <div style="background: #263F48; border-radius: var(--radius-lg); padding: var(--sp-6); display: flex; align-items: center; justify-content: center; min-height: 110px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-family: var(--font-primary); font-size: 32px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em; line-height: 1;">Claravine</span>
+                    <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height: 20px; width: auto;" aria-hidden="true">
+                      <path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- White on Green -->
+              <div>
+                <p style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; margin-bottom: var(--sp-3); letter-spacing: 0.04em; text-transform: uppercase;">White — Green bg</p>
+                <div style="background: #5DD39E; border-radius: var(--radius-lg); padding: var(--sp-6); display: flex; align-items: center; justify-content: center; min-height: 110px;">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-family: var(--font-primary); font-size: 32px; font-weight: 600; color: #FFFFFF; letter-spacing: -0.02em; line-height: 1;">Claravine</span>
+                    <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height: 20px; width: auto;" aria-hidden="true">
+                      <path d="M0 0V12H5V5.5H11V0Z" fill="#FFFFFF"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dark on Light (type only) -->
+              <div>
+                <p style="font-family: var(--font-primary); font-size: var(--text-xs); font-weight: 600; color: #5A7078; margin-bottom: var(--sp-3); letter-spacing: 0.04em; text-transform: uppercase;">Wordmark Only — Monochrome</p>
+                <div style="background: #FFFFFF; border: 1px solid #DDE5E8; border-radius: var(--radius-lg); padding: var(--sp-6); display: flex; align-items: center; justify-content: center; min-height: 110px;">
+                  <span style="font-family: var(--font-primary); font-size: 32px; font-weight: 600; color: #263F48; letter-spacing: -0.02em; line-height: 1;">Claravine</span>
+                </div>
+              </div>
+
             </div>
           </div>
 
-          <!-- Standalone Mark -->
+          <!-- Standalone Step Mark -->
           <div style="margin: var(--sp-7) 0;">
             <h3 class="sub-title">Standalone Step Mark</h3>
-            <p class="sub-desc">Use for icon, favicon, or when space is limited.</p>
-            <div style="background: var(--cv-white); border: 1px solid #DDE5E8; border-radius: var(--radius-lg); padding: var(--sp-6); text-align: center; margin: var(--sp-4) 0;">
-              <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: #F5F8F9; border-radius: 12px;">
-                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="height: 40px;">
-                  <rect x="8" y="12" width="16" height="16" fill="#5DD39E"/>
-                </svg>
+            <p class="sub-desc">Use the step mark alone as an icon, favicon, or social avatar when the full wordmark doesn't fit. It is derived from the anchor mark and carries the same proportions.</p>
+            <div style="display: flex; gap: var(--sp-6); flex-wrap: wrap; align-items: flex-end; background: #FFFFFF; border: 1px solid #DDE5E8; border-radius: var(--radius-lg); padding: var(--sp-6); margin: var(--sp-4) 0;">
+              <!-- 24px -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: var(--sp-2);">
+                <div style="width: 40px; height: 40px; background: #F5F8F9; border: 1px solid #DDE5E8; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                  <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height: 24px; width: auto;"><path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/></svg>
+                </div>
+                <span style="font-family: var(--font-primary); font-size: 10px; color: #8FA4AA; font-weight: 500;">24px</span>
               </div>
-            </div>
-          </div>
-
-          <!-- Monochrome -->
-          <div style="margin: var(--sp-7) 0;">
-            <h3 class="sub-title">Monochrome Variations</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-6); margin: var(--sp-4) 0;">
-              <div style="background: var(--cv-white); border: 1px solid #DDE5E8; border-radius: var(--radius-lg); padding: var(--sp-6); text-align: center;">
-                <p style="font-size: var(--text-sm); color: #5A7078; margin-bottom: var(--sp-3);">Dark on Light</p>
-                <svg viewBox="0 0 200 32" xmlns="http://www.w3.org/2000/svg" style="height: 40px; margin: 0 auto;">
-                  <text x="0" y="24" font-family="Poppins, sans-serif" font-size="24" font-weight="700" fill="#263F48">Claravine</text>
-                </svg>
+              <!-- 40px -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: var(--sp-2);">
+                <div style="width: 64px; height: 64px; background: #F5F8F9; border: 1px solid #DDE5E8; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center;">
+                  <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height: 40px; width: auto;"><path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/></svg>
+                </div>
+                <span style="font-family: var(--font-primary); font-size: 10px; color: #8FA4AA; font-weight: 500;">40px</span>
               </div>
-              <div style="background: #263F48; border-radius: var(--radius-lg); padding: var(--sp-6); text-align: center;">
-                <p style="font-size: var(--text-sm); color: rgba(255,255,255,0.6); margin-bottom: var(--sp-3);">Light on Dark</p>
-                <svg viewBox="0 0 200 32" xmlns="http://www.w3.org/2000/svg" style="height: 40px; margin: 0 auto;">
-                  <text x="0" y="24" font-family="Poppins, sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">Claravine</text>
-                </svg>
+              <!-- 64px -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: var(--sp-2);">
+                <div style="width: 96px; height: 96px; background: #F5F8F9; border: 1px solid #DDE5E8; border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                  <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height: 64px; width: auto;"><path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/></svg>
+                </div>
+                <span style="font-family: var(--font-primary); font-size: 10px; color: #8FA4AA; font-weight: 500;">64px</span>
+              </div>
+              <!-- Dark bg -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: var(--sp-2);">
+                <div style="width: 96px; height: 96px; background: #263F48; border-radius: 16px; display: flex; align-items: center; justify-content: center;">
+                  <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height: 64px; width: auto;"><path d="M0 0V12H5V5.5H11V0Z" fill="#FFFFFF"/></svg>
+                </div>
+                <span style="font-family: var(--font-primary); font-size: 10px; color: #8FA4AA; font-weight: 500;">White on Dark</span>
               </div>
             </div>
           </div>
@@ -1543,7 +2164,103 @@
           <!-- Clear Space -->
           <div style="margin: var(--sp-7) 0;">
             <h3 class="sub-title">Clear Space & Minimum Size</h3>
-            <p class="sub-desc">Always maintain minimum clear space around the logo. Minimum width: 120px for full logo, 40px for step mark only.</p>
+            <p class="sub-desc">Always maintain clear space equal to the cap-height of the wordmark around all edges. Minimum rendered width: 120px for full logo, 24px for step mark only.</p>
+          </div>
+
+          <!-- Do/Don't -->
+          <div style="margin: var(--sp-7) 0;">
+            <h3 class="sub-title">Logo Do's and Don'ts</h3>
+            <p class="sub-desc">Follow these guidelines to maintain brand integrity across all media.</p>
+            <div class="logo-dodont-grid">
+
+              <!-- DO: Full color on white -->
+              <div class="logo-dodont-card logo-dodont-card--do">
+                <div class="logo-dodont-card__preview">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span style="font-family:var(--font-primary);font-size:20px;font-weight:600;color:#263F48;letter-spacing:-0.02em;line-height:1;">Claravine</span>
+                    <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;"><path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/></svg>
+                  </div>
+                </div>
+                <div class="logo-dodont-card__label">✓ Do</div>
+                <div class="logo-dodont-card__desc">Use full color logo on white or light neutral backgrounds.</div>
+              </div>
+
+              <!-- DO: White on dark -->
+              <div class="logo-dodont-card logo-dodont-card--do">
+                <div class="logo-dodont-card__preview" style="background:#263F48;">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span style="font-family:var(--font-primary);font-size:20px;font-weight:600;color:#FFF;letter-spacing:-0.02em;line-height:1;">Claravine</span>
+                    <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;"><path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/></svg>
+                  </div>
+                </div>
+                <div class="logo-dodont-card__label">✓ Do</div>
+                <div class="logo-dodont-card__desc">Use white wordmark + green step mark on brand dark background.</div>
+              </div>
+
+              <!-- DO: Maintain proportions -->
+              <div class="logo-dodont-card logo-dodont-card--do">
+                <div class="logo-dodont-card__preview">
+                  <div style="display:flex;align-items:center;gap:5px;">
+                    <span style="font-family:var(--font-primary);font-size:15px;font-weight:600;color:#263F48;letter-spacing:-0.02em;line-height:1;">Claravine</span>
+                    <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height:9px;width:auto;"><path d="M0 0V12H5V5.5H11V0Z" fill="#5DD39E"/></svg>
+                  </div>
+                </div>
+                <div class="logo-dodont-card__label">✓ Do</div>
+                <div class="logo-dodont-card__desc">Scale uniformly. Keep wordmark and step mark proportional.</div>
+              </div>
+
+              <!-- DON'T: Stretch -->
+              <div class="logo-dodont-card logo-dodont-card--dont">
+                <div class="logo-dodont-card__preview">
+                  <span style="font-family:var(--font-primary);font-size:20px;font-weight:600;color:#263F48;letter-spacing:-0.02em;line-height:1;transform:scaleX(1.5);display:inline-block;">Claravine</span>
+                </div>
+                <div class="logo-dodont-card__label">✗ Don't</div>
+                <div class="logo-dodont-card__desc">Do not stretch, compress, or distort the logo in any direction.</div>
+              </div>
+
+              <!-- DON'T: Low contrast -->
+              <div class="logo-dodont-card logo-dodont-card--dont">
+                <div class="logo-dodont-card__preview" style="background:#A8C4CC;">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span style="font-family:var(--font-primary);font-size:20px;font-weight:600;color:#8FA4AA;letter-spacing:-0.02em;line-height:1;">Claravine</span>
+                    <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;"><path d="M0 0V12H5V5.5H11V0Z" fill="#8FA4AA"/></svg>
+                  </div>
+                </div>
+                <div class="logo-dodont-card__label">✗ Don't</div>
+                <div class="logo-dodont-card__desc">Do not place the logo on backgrounds with insufficient contrast.</div>
+              </div>
+
+              <!-- DON'T: Wrong color -->
+              <div class="logo-dodont-card logo-dodont-card--dont">
+                <div class="logo-dodont-card__preview">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span style="font-family:var(--font-primary);font-size:20px;font-weight:600;color:#FF6B6B;letter-spacing:-0.02em;line-height:1;">Claravine</span>
+                    <svg viewBox="0 0 11 12" xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;"><path d="M0 0V12H5V5.5H11V0Z" fill="#FDCE00"/></svg>
+                  </div>
+                </div>
+                <div class="logo-dodont-card__label">✗ Don't</div>
+                <div class="logo-dodont-card__desc">Do not recolor the wordmark or step mark in non-brand colors.</div>
+              </div>
+
+              <!-- DON'T: Add effects -->
+              <div class="logo-dodont-card logo-dodont-card--dont">
+                <div class="logo-dodont-card__preview">
+                  <span style="font-family:var(--font-primary);font-size:20px;font-weight:600;color:#263F48;letter-spacing:-0.02em;line-height:1;text-shadow:3px 3px 6px rgba(0,0,0,0.4);">Claravine</span>
+                </div>
+                <div class="logo-dodont-card__label">✗ Don't</div>
+                <div class="logo-dodont-card__desc">Do not add drop shadows, gradients, or visual effects to the logo.</div>
+              </div>
+
+              <!-- DON'T: Rotate -->
+              <div class="logo-dodont-card logo-dodont-card--dont">
+                <div class="logo-dodont-card__preview">
+                  <span style="font-family:var(--font-primary);font-size:18px;font-weight:600;color:#263F48;letter-spacing:-0.02em;line-height:1;transform:rotate(-15deg);display:inline-block;">Claravine</span>
+                </div>
+                <div class="logo-dodont-card__label">✗ Don't</div>
+                <div class="logo-dodont-card__desc">Do not rotate, tilt, or apply any transformations to the logo.</div>
+              </div>
+
+            </div>
           </div>
         </div>
       </section>
@@ -1674,15 +2391,15 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-5); margin: var(--sp-4) 0;">
               <div style="padding: var(--sp-4); background: rgba(93,211,158,0.1); border-radius: var(--radius-md);">
                 <p style="font-family: var(--font-primary); font-weight: 600; color: var(--cv-green); margin-bottom: var(--sp-2);">Clear</p>
-                <p style="font-size: var(--text-sm); color: rgba(255,255,255,0.85); line-height: 1.6;">Cut through jargon. Use simple words. Explain things like you're talking to a smart colleague.</p>
+                <p style="font-family: var(--font-secondary); font-size: var(--text-sm); color: rgba(255,255,255,0.80); line-height: 1.6;">Cut through jargon. Use simple words. Explain things like you're talking to a smart colleague.</p>
               </div>
               <div style="padding: var(--sp-4); background: rgba(93,211,158,0.1); border-radius: var(--radius-md);">
                 <p style="font-family: var(--font-primary); font-weight: 600; color: var(--cv-green); margin-bottom: var(--sp-2);">Confident</p>
-                <p style="font-size: var(--text-sm); color: rgba(255,255,255,0.85); line-height: 1.6;">Stand behind what we say. Use active voice. Be direct and bold.</p>
+                <p style="font-family: var(--font-secondary); font-size: var(--text-sm); color: rgba(255,255,255,0.80); line-height: 1.6;">Stand behind what we say. Use active voice. Be direct and bold.</p>
               </div>
               <div style="padding: var(--sp-4); background: rgba(93,211,158,0.1); border-radius: var(--radius-md);">
                 <p style="font-family: var(--font-primary); font-weight: 600; color: var(--cv-green); margin-bottom: var(--sp-2);">Human</p>
-                <p style="font-size: var(--text-sm); color: rgba(255,255,255,0.85); line-height: 1.6;">Write like a person, not a machine. Show personality. Be relatable.</p>
+                <p style="font-family: var(--font-secondary); font-size: var(--text-sm); color: rgba(255,255,255,0.80); line-height: 1.6;">Write like a person, not a machine. Show personality. Be relatable.</p>
               </div>
             </div>
           </div>
@@ -1693,15 +2410,15 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-5); margin: var(--sp-4) 0;">
               <div style="padding: var(--sp-4); background: rgba(93,211,158,0.1); border-radius: var(--radius-md);">
                 <p style="font-family: var(--font-primary); font-weight: 600; color: var(--cv-green); margin-bottom: var(--sp-2);">Helpful (Support)</p>
-                <p style="font-size: var(--text-sm); color: rgba(255,255,255,0.85); line-height: 1.6;">Patient. Solution-focused. Acknowledge the problem before the fix.</p>
+                <p style="font-family: var(--font-secondary); font-size: var(--text-sm); color: rgba(255,255,255,0.80); line-height: 1.6;">Patient. Solution-focused. Acknowledge the problem before the fix.</p>
               </div>
               <div style="padding: var(--sp-4); background: rgba(93,211,158,0.1); border-radius: var(--radius-md);">
                 <p style="font-family: var(--font-primary); font-weight: 600; color: var(--cv-green); margin-bottom: var(--sp-2);">Educational (Docs)</p>
-                <p style="font-size: var(--text-sm); color: rgba(255,255,255,0.85); line-height: 1.6;">Instructive. Show examples. Break down concepts.</p>
+                <p style="font-family: var(--font-secondary); font-size: var(--text-sm); color: rgba(255,255,255,0.80); line-height: 1.6;">Instructive. Show examples. Break down concepts.</p>
               </div>
               <div style="padding: var(--sp-4); background: rgba(93,211,158,0.1); border-radius: var(--radius-md);">
                 <p style="font-family: var(--font-primary); font-weight: 600; color: var(--cv-green); margin-bottom: var(--sp-2);">Energetic (Marketing)</p>
-                <p style="font-size: var(--text-sm); color: rgba(255,255,255,0.85); line-height: 1.6;">Optimistic. Inspiring. Focus on possibilities.</p>
+                <p style="font-family: var(--font-secondary); font-size: var(--text-sm); color: rgba(255,255,255,0.80); line-height: 1.6;">Optimistic. Inspiring. Focus on possibilities.</p>
               </div>
             </div>
           </div>
@@ -2058,6 +2775,36 @@
     };
 
     updateWeather();
+
+    // COPY HEX
+    const toast = document.createElement('div');
+    toast.className = 'copy-toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    document.body.appendChild(toast);
+
+    let toastTimer = null;
+    function copyHex(el, hex) {
+      navigator.clipboard.writeText(hex).then(() => {
+        toast.textContent = hex + ' copied';
+        toast.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+      }).catch(() => {
+        // Fallback for non-secure contexts
+        const ta = document.createElement('textarea');
+        ta.value = hex;
+        ta.style.cssText = 'position:fixed;opacity:0;';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch(e) {}
+        document.body.removeChild(ta);
+        toast.textContent = hex + ' copied';
+        toast.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+      });
+    }
 
     // MOBILE MENU
     const sidebarOverlay = document.querySelector('.sidebar-overlay');
