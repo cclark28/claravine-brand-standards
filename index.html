@@ -813,6 +813,14 @@
       border-top: 1px solid #DDE5E8;
     }
 
+    /* Typeface cards 2-col grid */
+    .type-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-6);
+      align-items: start;
+    }
+
     /* Type scale table */
     .type-scale { display: flex; flex-direction: column; }
     .type-scale-row {
@@ -867,6 +875,13 @@
     /* ====================================================
        ICONOGRAPHY
     ==================================================== */
+    .icon-meta-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-6);
+      align-items: start;
+      margin-bottom: var(--sp-6);
+    }
     .icon-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -1902,6 +1917,8 @@
       .usage-incorrect { grid-template-columns: 1fr 1fr; }
       .sec-swatches { grid-template-columns: 1fr 1fr; }
       .type-card__weights { grid-template-columns: 1fr 1fr; }
+      .type-cards-grid { grid-template-columns: 1fr; }
+      .icon-meta-row { grid-template-columns: 1fr; }
       .motion-grid { grid-template-columns: 1fr; }
       .motion-demo-wrap { grid-template-columns: repeat(3, 1fr); }
       .sh__title { font-size: clamp(1.6rem, 4vw, 2rem); }
@@ -2448,16 +2465,15 @@
     <div class="cv-panel" id="panel-typography">
     <section id="typography" class="section" aria-labelledby="type-heading">
       <div class="container">
-        <div class="cv-grid">
-          <div>
-            <div class="sh">
-              <span class="sh__eyebrow">Design System · Typography</span>
-              <h2 class="sh__title" id="type-heading">Typography System</h2>
-              <div class="sh__rule"></div>
-              <p class="sh__desc">Claravine uses Poppins for headlines and Roboto for body text. Together they balance geometric modernity with functional clarity.</p>
-            </div>
-            <p class="sub-title">Type Scale</p>
-            <div class="type-scale">
+        <!-- Full-width header + type scale lead -->
+        <div class="sh">
+          <span class="sh__eyebrow">Design System · Typography</span>
+          <h2 class="sh__title" id="type-heading">Typography System</h2>
+          <div class="sh__rule"></div>
+          <p class="sh__desc">Claravine uses Poppins for headlines and Roboto for body text. Together they balance geometric modernity with functional clarity.</p>
+        </div>
+        <p class="sub-title" style="margin-top:var(--sp-6);">Type Scale</p>
+        <div class="type-scale" style="margin-bottom:var(--sp-8);">
               <div class="type-scale-row">
                 <div class="type-scale-row__meta"><p class="type-scale-row__px">54px</p><p class="type-scale-row__name">Display</p></div>
                 <p class="type-scale-row__sample" style="font-size:2.25rem;font-family:var(--font-primary);font-weight:600;color:var(--cv-dark);line-height:1.1;">Display</p>
@@ -2490,10 +2506,11 @@
                 <div class="type-scale-row__meta"><p class="type-scale-row__px">12px</p><p class="type-scale-row__name">XS</p></div>
                 <p class="type-scale-row__sample" style="font-size:var(--text-xs);font-family:var(--font-primary);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#8FA4AA;">LABEL / EYEBROW</p>
               </div>
-            </div>
-          </div>
+        </div>
 
-          <div>
+        <!-- Typeface specimens — 2-col below -->
+        <p class="sub-title" style="margin-bottom:var(--sp-4);">Typefaces</p>
+        <div class="type-cards-grid">
             <!-- Poppins specimen -->
             <div class="type-card">
               <div class="type-card__header">
@@ -2569,8 +2586,7 @@
                 BlinkMacSystemFont, 'Segoe UI', sans-serif
               </p>
             </div>
-          </div>
-        </div>
+        </div><!-- /type-cards-grid -->
       </div>
     </section>
     </div>
@@ -2705,54 +2721,24 @@
     <div class="cv-panel" id="panel-iconography">
     <section id="iconography" class="section section--light" aria-labelledby="icon-heading">
       <div class="container">
-        <div class="cv-grid">
-          <div>
-            <div class="sh">
-              <span class="sh__eyebrow">Design System · Iconography</span>
-              <h2 class="sh__title" id="icon-heading">Iconography</h2>
-              <div class="sh__rule"></div>
-              <p class="sh__desc">Claravine's icon system uses Google Material Symbols in the Rounded style. Clean, modern, and rounded — they align with the brand's approachable aesthetic and ensure visual harmony across all platforms.</p>
-            </div>
-            <div class="callout">
-              <strong>Library:</strong> Google Material Symbols · Rounded style<br>
-              <strong>Fill:</strong> Outlined only (FILL=0) — no filled icons<br>
-              <strong>Weight:</strong> 400 · Size: 24px default<br>
-              <strong>Usage:</strong> Pair icons with visible text labels wherever space allows<br>
-              <strong>Full library:</strong> <a href="https://fonts.google.com/icons?icon.style=Rounded" target="_blank" rel="noopener" style="color:var(--cv-green);font-weight:600;">fonts.google.com/icons?icon.style=Rounded ↗</a>
-            </div>
-            <br>
-            <div class="do-dont">
-              <div class="dd-box">
-                <div class="dd-head dd-head--do">
-                  <span class="material-symbols-rounded" style="font-size:18px;color:#1A6B42;">check_circle</span>
-                  Do
-                </div>
-                <ul class="dd-list">
-                  <li>Use icons at consistent sizes (16, 20, 24, 32 px)</li>
-                  <li>Maintain original aspect ratio at all scales</li>
-                  <li>Use Rounded style throughout the same design</li>
-                  <li>Pair icons with text labels for accessibility</li>
-                  <li>Apply brand colors consistently</li>
-                </ul>
-              </div>
-              <div class="dd-box">
-                <div class="dd-head dd-head--dont">
-                  <span class="material-symbols-rounded" style="font-size:18px;color:#B71C1C;">cancel</span>
-                  Do Not
-                </div>
-                <ul class="dd-list">
-                  <li>Mix icon styles (Outlined vs. Rounded)</li>
-                  <li>Scale icons non-proportionally</li>
-                  <li>Use icons smaller than 16 px without testing</li>
-                  <li>Apply multiple colors to a single icon</li>
-                  <li>Use icons as the sole indicator of action</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+        <!-- Full-width header + spec callout -->
+        <div class="sh">
+          <span class="sh__eyebrow">Design System · Iconography</span>
+          <h2 class="sh__title" id="icon-heading">Iconography</h2>
+          <div class="sh__rule"></div>
+          <p class="sh__desc">Claravine's icon system uses Google Material Symbols in the Rounded style. Clean, modern, and rounded — they align with the brand's approachable aesthetic and ensure visual harmony across all platforms.</p>
+        </div>
+        <div class="callout" style="margin-top:var(--sp-5);margin-bottom:var(--sp-6);">
+          <strong>Library:</strong> Google Material Symbols · Rounded style<br>
+          <strong>Fill:</strong> Outlined only (FILL=0) — no filled icons<br>
+          <strong>Weight:</strong> 400 · Size: 24px default<br>
+          <strong>Usage:</strong> Pair icons with visible text labels wherever space allows<br>
+          <strong>Full library:</strong> <a href="https://fonts.google.com/icons?icon.style=Rounded" target="_blank" rel="noopener" style="color:var(--cv-green);font-weight:600;">fonts.google.com/icons?icon.style=Rounded ↗</a>
+        </div>
 
+        <!-- Size scale + color demo side-by-side -->
+        <div class="icon-meta-row">
           <div>
-            <!-- Icon size demo -->
             <p class="sub-title" style="color:var(--cv-dark);">Size Scale</p>
             <div class="icon-sizes">
               <div class="icon-size-item">
@@ -2776,9 +2762,10 @@
                 <span class="icon-size-label">48 px · XL</span>
               </div>
             </div>
-
+          </div><!-- /icon-meta-row col 1 -->
+          <div><!-- icon-meta-row col 2 -->
             <!-- Color usage -->
-            <p class="sub-title" style="color:var(--cv-dark);margin-top:var(--sp-5);">Color Usage</p>
+            <p class="sub-title" style="color:var(--cv-dark);">Color Usage</p>
             <div class="icon-color-demo">
               <div class="icon-color-item">
                 <span class="material-symbols-rounded" style="color:#263F48;">analytics</span>
@@ -2801,9 +2788,11 @@
                 <span class="icon-color-item__label" style="color:rgba(255,255,255,0.5);">On Dark</span>
               </div>
             </div>
+          </div><!-- /icon-meta-row col 2 -->
+        </div><!-- /icon-meta-row -->
 
-            <!-- Icon grid -->
-            <p class="sub-title" style="color:var(--cv-dark);margin-top:var(--sp-5);">Commonly Used Icons</p>
+        <!-- Full-width icon grid -->
+        <p class="sub-title" style="color:var(--cv-dark);margin-top:var(--sp-6);">Commonly Used Icons</p>
             <div class="icon-grid">
               <div class="icon-cell"><span class="material-symbols-rounded">analytics</span><span class="icon-cell__name">analytics</span></div>
               <div class="icon-cell"><span class="material-symbols-rounded">dataset</span><span class="icon-cell__name">dataset</span></div>
@@ -2846,6 +2835,35 @@
                 Browse Full Icon Library
               </a>
             </div>
+
+        <!-- Icon Do / Don't — full-width stacked below grid -->
+        <p class="sub-title" style="color:var(--cv-dark);margin-top:var(--sp-7);">Icon Do &amp; Don't</p>
+        <div class="do-dont">
+          <div class="dd-box">
+            <div class="dd-head dd-head--do">
+              <span class="material-symbols-rounded" style="font-size:18px;color:#1A6B42;">check_circle</span>
+              Do
+            </div>
+            <ul class="dd-list">
+              <li>Use icons at consistent sizes (16, 20, 24, 32 px)</li>
+              <li>Maintain original aspect ratio at all scales</li>
+              <li>Use Rounded style throughout the same design</li>
+              <li>Pair icons with text labels for accessibility</li>
+              <li>Apply brand colors consistently</li>
+            </ul>
+          </div>
+          <div class="dd-box">
+            <div class="dd-head dd-head--dont">
+              <span class="material-symbols-rounded" style="font-size:18px;color:#B71C1C;">cancel</span>
+              Do Not
+            </div>
+            <ul class="dd-list">
+              <li>Mix icon styles (Outlined vs. Rounded)</li>
+              <li>Scale icons non-proportionally</li>
+              <li>Use icons smaller than 16 px without testing</li>
+              <li>Apply multiple colors to a single icon</li>
+              <li>Use icons as the sole indicator of action</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -2860,16 +2878,17 @@
     <div class="cv-panel" id="panel-logo">
     <section id="logo" class="section" aria-labelledby="logo-heading">
       <div class="container">
-        <div class="cv-grid">
-          <div>
-            <div class="sh">
-              <span class="sh__eyebrow">Design System · Logo</span>
-              <h2 class="sh__title" id="logo-heading">Logo Usage</h2>
-              <div class="sh__rule"></div>
-              <p class="sh__desc">The Claravine logo is minimalist and modern, featuring lowercase typography with a subtle step mark — symbolic of the structured grid associated with data standards. Always use approved files from the asset library.</p>
-            </div>
-            <p class="sub-title">The Step Mark</p>
-            <p class="sub-desc">The step mark (the small square element appended to the wordmark) represents the disciplined structure of data standards — a reference to the precision of spreadsheet tooling. It must always accompany the wordmark unless using the standalone mark variant.</p>
+        <!-- Full-width supporting copy first -->
+        <div class="sh">
+          <span class="sh__eyebrow">Design System · Logo</span>
+          <h2 class="sh__title" id="logo-heading">Logo Usage</h2>
+          <div class="sh__rule"></div>
+          <p class="sh__desc">The Claravine logo is minimalist and modern, featuring lowercase typography with a subtle step mark — symbolic of the structured grid associated with data standards. Always use approved files from the asset library.</p>
+        </div>
+
+        <!-- Anchor mark description + clear space (full-width) -->
+        <p class="sub-title" style="margin-top:var(--sp-6);">The Anchor Mark</p>
+            <p class="sub-desc">The anchor mark (the small staircase element at the end of the wordmark) represents the disciplined structure of data standards — a reference to the precision of spreadsheet tooling. It must always accompany the wordmark unless using the standalone mark variant.</p>
 
             <!-- Clear space -->
             <p class="sub-title" style="margin-top:var(--sp-5);">Clear Space</p>
@@ -2886,44 +2905,9 @@
             </div>
             <p style="font-size:var(--text-xs);color:#8FA4AA;text-align:center;margin-bottom:var(--sp-5);">X = cap-height of the wordmark at the applied size</p>
 
-            <!-- Do / Don't -->
-            <p class="sub-title">Logo Do &amp; Don't</p>
-            <div class="do-dont">
-              <div class="dd-box">
-                <div class="dd-head dd-head--do">
-                  <span class="material-symbols-rounded" style="font-size:18px;color:#1A6B42;">check_circle</span>
-                  Do
-                </div>
-                <ul class="dd-list">
-                  <li>Place on a clean, uncluttered background</li>
-                  <li>Size proportionately — maintain aspect ratio</li>
-                  <li>Use approved color combinations only</li>
-                  <li>Ensure sufficient contrast on all backgrounds</li>
-                  <li>Use all-white logo on dark backgrounds</li>
-                  <li>Maintain required clear space at all times</li>
-                </ul>
-              </div>
-              <div class="dd-box">
-                <div class="dd-head dd-head--dont">
-                  <span class="material-symbols-rounded" style="font-size:18px;color:#B71C1C;">cancel</span>
-                  Do Not
-                </div>
-                <ul class="dd-list">
-                  <li>Stretch, distort, or rotate the logo</li>
-                  <li>Place on busy or high-contrast imagery</li>
-                  <li>Alter colors or add drop shadows or effects</li>
-                  <li>Rearrange or modify the mark position</li>
-                  <li>Use the full-color logo on colored backgrounds</li>
-                  <li>Recreate the logo from scratch</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <!-- Logo variations -->
-            <p class="sub-title">Logo Variations</p>
-            <div class="logo-variations">
+        <!-- Full-width logo variations -->
+        <p class="sub-title" style="margin-top:var(--sp-7);">Logo Variations</p>
+        <div class="logo-variations">
               <div class="logo-var">
                 <div class="logo-var__stage logo-var__stage--light">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 193 41" fill="none" style="width:190px;" aria-label="Claravine full color logo"><path d="M46.0059 8.93848C50.5063 8.93848 55.918 9.97743 55.918 15.6299V27.8945H55.9043C55.9043 30.0371 56.139 32.1801 56.6982 33.1396H50.4023C50.1942 32.4036 50.0127 31.6407 49.9736 30.8652C47.9965 33.0079 45.1345 33.7832 42.377 33.7832C38.0977 33.7831 34.6904 31.5483 34.6904 26.7109C34.6905 21.3875 38.527 20.0995 42.377 19.5605C46.188 18.969 49.7128 19.2315 49.7129 16.458C49.7129 13.6845 47.8794 13.2637 45.6943 13.2637C43.327 13.2637 41.8051 14.2629 41.584 16.8262H35.3799C35.7311 10.7532 40.9332 8.93857 46.0059 8.93848ZM174.309 8.89941C181.983 8.89941 185.703 15.6432 185.261 22.8994H168.976C169.145 27.0135 171.07 28.8798 174.517 28.8799C174.907 28.8799 175.284 28.8406 175.648 28.7617V33.6914C175.193 33.7308 174.751 33.7568 174.296 33.7568C167.168 33.7568 162.759 28.4465 162.759 21.3613C162.759 14.276 167.441 8.89941 174.296 8.89941H174.309ZM88.2012 8.89941C92.7015 8.89941 98.113 9.93779 98.1133 15.5898V27.8545C98.1133 29.997 98.334 32.1399 98.9062 33.0996H92.6113C92.4032 32.3635 92.2207 31.6007 92.1816 30.8252C90.2046 32.9679 87.3298 33.7441 84.5723 33.7441C80.3061 33.744 76.8985 31.5091 76.8984 26.6719C76.8984 21.3482 80.7353 20.0595 84.5723 19.5205C88.3834 18.929 91.9219 19.1916 91.9219 16.418C91.9217 13.6448 90.0744 13.2246 87.9023 13.2246C85.5352 13.2246 84.0132 14.2231 83.792 16.7861H77.5879C77.9263 10.7135 83.1286 8.89952 88.2012 8.89941ZM11.498 8.71582C12.4996 8.71582 13.4756 8.83362 14.4121 9.04395C14.6721 9.09651 14.9063 9.16184 15.1533 9.22754C15.2443 9.2538 15.3222 9.26771 15.4131 9.29395C15.4651 9.30709 15.531 9.32039 15.583 9.34668C19.1076 10.4904 21.826 13.2242 22.1123 17.6406H16.0508C15.6605 14.9988 14.0477 13.7374 11.4727 13.7373C7.50553 13.7373 6.19144 17.7723 6.19141 21.2295C6.19141 25.4096 7.93432 28.3281 11.3291 28.3281C13.5923 28.3281 14.8806 27.3157 15.583 26.0537V26.0938H21.7744C20.3696 30.9048 16.5706 33.5205 11.3809 33.5205C4.57835 33.5203 1.25194e-05 28.788 0 21.4531C0 14.1182 4.1882 8.71595 11.498 8.71582ZM151.338 8.91211C157.932 8.91211 159.598 12.7902 159.598 18.6396V33.1396H153.394V19.8096C153.393 15.932 152.301 14.0264 149.413 14.0264C146.044 14.0264 144.601 15.9847 144.601 20.7695V33.165H138.396V9.54395H144.288V12.8301H144.418C145.992 10.1747 148.711 8.89941 151.325 8.89941L151.338 8.91211ZM31.6982 33.1523H24.9736V0.81543H31.6982V33.1523ZM74.0371 9.79297C74.4793 9.79302 74.9995 9.89885 75.3896 10.0303V16.3262C74.8303 16.1816 73.9064 16.0898 73.165 16.0898C68.6259 16.09 67.0519 19.5075 67.0518 23.6611V33.1523H60.8477V10.1348H66.7402V14.8018H66.8174L66.8311 14.8145C67.9758 11.8438 71.0196 9.79297 74.0371 9.79297ZM132.23 33.1523H126.026V9.79297H132.23V33.1523ZM111.602 25.6465H111.705L116.466 9.53027H122.618L114.983 33.126H108.076L100.35 9.53027H106.854L111.602 25.6465ZM49.7266 21.5977C48.686 22.5573 46.5003 22.6099 44.5752 22.9648C42.6502 23.3855 40.9072 24.0038 40.9072 26.4355C40.9074 28.8669 42.6893 29.4452 44.7051 29.4453C49.5567 29.4453 49.7266 25.4358 49.7266 24.0293V21.5977ZM91.9082 21.5713C90.8676 22.5307 88.6697 22.5704 86.7578 22.9385C84.8328 23.3591 83.0898 23.9905 83.0898 26.4092C83.09 28.8275 84.8718 29.4189 86.8877 29.4189C91.7394 29.4189 91.9082 25.4095 91.9082 24.0029V21.5713ZM174.14 13.7764C170.211 13.7764 169.067 16.9707 168.989 18.7979H179.069C178.497 15.5116 177.144 13.7764 174.14 13.7764ZM132.205 6.44141H126.026V0H132.205V6.44141Z" fill="#263F48"/><path d="M181.19 28.6304V41.0001H186.483V34.204H193V28.6304H181.19Z" fill="#5DD39E"/></svg>
@@ -2945,21 +2929,52 @@
               <div class="logo-var">
                 <div class="logo-var__stage logo-var__stage--neutral" style="gap:var(--sp-6);flex-direction:row;">
                   <!-- Mark variants -->
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 32" style="height:48px;" aria-label="Claravine mark color">
-                    <rect x="0" y="0" width="14" height="32" rx="3" fill="#5DD39E"/>
-                    <rect x="14" y="16" width="10" height="16" rx="2.5" fill="#5DD39E"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 199" style="height:48px;" aria-label="Claravine anchor mark green">
+                    <path d="M0 0V199H85.165V89.6663H190V0H0Z" fill="#5DD39E"/>
                   </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 32" style="height:48px;" aria-label="Claravine mark dark">
-                    <rect x="0" y="0" width="14" height="32" rx="3" fill="#263F48"/>
-                    <rect x="14" y="16" width="10" height="16" rx="2.5" fill="#263F48"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 199" style="height:48px;" aria-label="Claravine anchor mark dark">
+                    <path d="M0 0V199H85.165V89.6663H190V0H0Z" fill="#263F48"/>
                   </svg>
                 </div>
-                <div class="logo-var__label">Step Mark — Color &amp; Dark Variants</div>
+                <div class="logo-var__label">Anchor Mark — Color &amp; Dark Variants</div>
               </div>
-            </div>
+        </div><!-- /logo-variations -->
 
-            <!-- Incorrect usage -->
-            <p class="sub-title" style="margin-top:var(--sp-5);">Incorrect Usage Examples</p>
+        <!-- Full-width do / don't -->
+        <p class="sub-title" style="margin-top:var(--sp-7);">Logo Do &amp; Don't</p>
+        <div class="do-dont" style="margin-bottom:var(--sp-7);">
+          <div class="dd-box">
+            <div class="dd-head dd-head--do">
+              <span class="material-symbols-rounded" style="font-size:18px;color:#1A6B42;">check_circle</span>
+              Do
+            </div>
+            <ul class="dd-list">
+              <li>Place on a clean, uncluttered background</li>
+              <li>Size proportionately — maintain aspect ratio</li>
+              <li>Use approved color combinations only</li>
+              <li>Ensure sufficient contrast on all backgrounds</li>
+              <li>Use all-white logo on dark backgrounds</li>
+              <li>Maintain required clear space at all times</li>
+            </ul>
+          </div>
+          <div class="dd-box">
+            <div class="dd-head dd-head--dont">
+              <span class="material-symbols-rounded" style="font-size:18px;color:#B71C1C;">cancel</span>
+              Do Not
+            </div>
+            <ul class="dd-list">
+              <li>Stretch, distort, or rotate the logo</li>
+              <li>Place on busy or high-contrast imagery</li>
+              <li>Alter colors or add drop shadows or effects</li>
+              <li>Rearrange or modify the mark position</li>
+              <li>Use the full-color logo on colored backgrounds</li>
+              <li>Recreate the logo from scratch</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Incorrect usage examples -->
+        <p class="sub-title">Incorrect Usage Examples</p>
             <div class="usage-incorrect">
               <div class="usage-ex">
                 <div class="usage-ex__stage" style="background:#F5F8F9;">
@@ -2984,11 +2999,9 @@
               </div>
             </div>
 
-            <!-- Partner lockup note -->
-            <div class="callout" style="margin-top:var(--sp-5);">
-              <strong>Partner Lockups:</strong> When pairing the Claravine logo with a partner logo, separate them with a vertical divider line and maintain equal spacing on both sides. For light backgrounds, use all-black logos; for dark backgrounds, use all-white logos.
-            </div>
-          </div>
+        <!-- Partner lockup note -->
+        <div class="callout" style="margin-top:var(--sp-5);">
+          <strong>Partner Lockups:</strong> When pairing the Claravine logo with a partner logo, separate them with a vertical divider line and maintain equal spacing on both sides. For light backgrounds, use all-black logos; for dark backgrounds, use all-white logos.
         </div>
       </div>
     </section>
